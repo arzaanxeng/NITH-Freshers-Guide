@@ -1,27 +1,34 @@
 # Contributing to NITH Fresher's Guide
 
-Thank you for helping keep the **NITH Fresher's Guide** accurate, high-quality, and up-to-date for future generations of NIT Hamirpur students!
+Thank you for helping keep the **NITH Fresher's Guide** accurate, high-quality, and up to date for future generations of NIT Hamirpur students.
+
+## Table of Contents
+
+- [Core Rule: Quality Over Quantity](#core-rule-quality-over-quantity)
+- [How to Add or Edit Resources](#how-to-add-or-edit-resources)
+- [Testing & Verification Pipeline](#testing--verification-pipeline)
+- [Submitting a Pull Request](#submitting-a-pull-request)
 
 ---
 
-## 🎯 Core Rule: Quality Over Quantity
+## Core Rule: Quality Over Quantity
 
-> **1 excellent, verified resource > 10 mediocre or unverified resources.**
+> One excellent, verified resource is worth more than ten mediocre or unverified ones.
 
-Before submitting a resource, verify that it meets the following strict criteria:
+Before submitting a resource, confirm it meets the following criteria:
 
-1. **Verified Real URL**: Every URL must be an active, clickable HTTP/HTTPS link. Never submit shortened URLs, fake links, or unverified video IDs.
-2. **Authoritative Creator**: Prefer well-known educators and official documentation (e.g. CampusX, Striver, CodeWithHarry, TechWorld with Nana, Andreas Spiess, Ben Eater, MDN, PyTorch Docs, ESP-IDF Docs).
-3. **Appropriate Level**: Accurately categorize difficulty as `beginner`, `intermediate`, or `advanced`.
-4. **No Self-Promotion or Spam**: Submissions must provide genuine, non-commercial educational value to NITH freshers.
+1. **Verified, real URL** — Every URL must be an active, clickable HTTP/HTTPS link. Do not submit shortened URLs, placeholder links, or unverified video IDs.
+2. **Authoritative creator** — Prefer well-known educators and official documentation (e.g. CampusX, Striver, CodeWithHarry, TechWorld with Nana, Andreas Spiess, Ben Eater, MDN, PyTorch Docs, ESP-IDF Docs).
+3. **Appropriate level** — Accurately categorize difficulty as `beginner`, `intermediate`, or `advanced`.
+4. **No self-promotion or spam** — Submissions must provide genuine, non-commercial educational value to NITH freshers.
 
 ---
 
-## 🛠️ How to Add or Edit Resources
+## How to Add or Edit Resources
 
-1. **Fork the repository** on GitHub.
+1. Fork the repository on GitHub.
 2. Navigate to `src/data/resources/` and locate the appropriate domain file (e.g. `webDevResources.ts`, `aiMlResources.ts`, `electronicsResources.ts`).
-3. Add your resource entry adhering to the TypeScript `Resource` schema:
+3. Add your resource entry following the TypeScript `Resource` schema:
 
 ```typescript
 {
@@ -48,25 +55,25 @@ Before submitting a resource, verify that it meets the following strict criteria
 
 ---
 
-## 🧪 Testing & Verification Pipeline
+## Testing & Verification Pipeline
 
-Before opening a Pull Request, run the automated verification suite and build check:
+Before opening a pull request, run the automated verification suite and build check:
 
 ```bash
-# 1. Run automated link verification suite
+# 1. Run the automated link verification suite
 npm run verify-links
 
-# 2. Verify TypeScript build
+# 2. Verify the TypeScript build
 npm run build
 ```
 
-Every resource must pass `npm run verify-links` with HTTP 200 OK status.
+Every resource must pass `npm run verify-links` with an HTTP 200 OK status.
 
 ---
 
-## 📤 Submitting a Pull Request
+## Submitting a Pull Request
 
-1. Create a feature branch (`git checkout -b add-resource-name`).
-2. Commit your changes (`git commit -m "Add verified resource for Web Dev"`).
-3. Push to your fork (`git push origin add-resource-name`).
-4. Open a Pull Request on GitHub with a clear summary of your changes.
+1. Create a feature branch: `git checkout -b add-resource-name`
+2. Commit your changes: `git commit -m "Add verified resource for Web Dev"`
+3. Push to your fork: `git push origin add-resource-name`
+4. Open a pull request on GitHub with a clear summary of your changes.
