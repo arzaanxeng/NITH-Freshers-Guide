@@ -4,6 +4,9 @@
 
 Created and maintained by **Syed Arzaan** — B.Tech Electrical Engineering, NIT Hamirpur
 
+# Overview
+![Landing Page](https://raw.githubusercontent.com/arzaanxeng/NITH-Freshers-Guide/main/view/Landing_page.png)
+
 ---
 
 ## Table of Contents
