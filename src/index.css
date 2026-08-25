@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Warm Cream / Paper Palette (Section 3) */
+  --bg-page: #F5F1E8;
+  --surface-primary: #FFFDF8;
+  --surface-secondary: #EEE9DE;
+  --border-color: #D8D0C2;
+  --border-strong: #171717;
+
+  /* Ink Typography */
+  --text-primary: #171717;
+  --text-body: #4B4A46;
+  --text-muted: #77736B;
+
+  /* Accents */
+  --accent-pink: #D9206E;
+  --accent-pink-subtle: #FDF0F5;
+  --accent-teal: #087F73;
+  --accent-teal-subtle: #E8F5F4;
+  --accent-blue: #2856B6;
+  --accent-blue-subtle: #EEF3FB;
+  --accent-amber: #D97706;
+  --accent-amber-subtle: #FEF8EC;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 2px solid var(--accent-pink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Card Level Shadows & Borders (Section 10) */
+/* Level 1: Important (stronger border, offset shadow) */
+.card-level-1 {
+  background-color: var(--surface-primary);
+  border: 1.5px solid var(--border-strong);
+  box-shadow: 3px 3px 0 var(--border-strong);
+}
+
+/* Level 2: Standard (thin border, subtle surface contrast) */
+.card-level-2 {
+  background-color: var(--surface-primary);
+  border: 1px solid var(--border-color);
+}
+
+/* Level 3: Supporting (plain surface/divider based) */
+.card-level-3 {
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-shadow-hover {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.card-shadow-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: 3px 3px 0 var(--border-strong);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-page);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D8D0C2;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8B0A2;
+}

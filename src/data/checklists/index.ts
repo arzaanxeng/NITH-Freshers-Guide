@@ -1,0 +1,116 @@
+import { FlowchartStage } from '../types'
+
+export const firstYearFlowchartStages: FlowchartStage[] = [
+  {
+    id: 'stage-1-base',
+    stepNumber: 1,
+    title: 'Set Up Your Base',
+    subtitle: 'Get your tools, accounts and development environment ready.',
+    iconName: 'Wrench',
+    items: [
+      { id: 'f1', label: 'Install VS Code & configure essential extensions', detail: 'C/C++, Python, Prettier, Git Graph', categoryTag: 'Tools' },
+      { id: 'f2', label: 'Install Linux / WSL or master Linux CLI basics', detail: 'cd, ls, mkdir, chmod, grep, ssh commands', categoryTag: 'Linux' },
+      { id: 'f3', label: 'Create a GitHub account & learn Git basics', detail: 'git init, clone, add, commit, push, pull, branch', categoryTag: 'Git' },
+      { id: 'f_env', label: 'Configure dev environment & terminal profile', detail: 'Set up zsh/bash aliases, SSH keys, and compiler tools', categoryTag: 'Env' },
+    ],
+  },
+  {
+    id: 'stage-2-fundamentals',
+    stepNumber: 2,
+    title: 'Learn the Fundamentals',
+    subtitle: 'Build strong programming and problem-solving foundations.',
+    iconName: 'Code',
+    items: [
+      { id: 'f4', label: 'Pick your core programming language (C++ or Python)', detail: 'Master syntax, loops, functions, and memory concepts', categoryTag: 'Language' },
+      { id: 'f_var', label: 'Master variables, data types, and operators', detail: 'Understand primitives, type casting, and expressions', categoryTag: 'Basics' },
+      { id: 'f_flow', label: 'Master control flow & conditional logic', detail: 'if/else conditionals, switch statements, for/while loops', categoryTag: 'Control' },
+      { id: 'f_func', label: 'Master functions, scope, and modular code', detail: 'Parameter passing, return values, recursion basics', categoryTag: 'Functions' },
+    ],
+  },
+  {
+    id: 'stage-3-practice',
+    stepNumber: 3,
+    title: 'Practice Consistently',
+    subtitle: 'Turn programming knowledge into problem-solving ability.',
+    iconName: 'Target',
+    items: [
+      { id: 'f5', label: 'Solve 30 basic problems on LeetCode / HackerRank', detail: 'Focus on arrays, strings, basic math, and logic', categoryTag: 'DSA' },
+      { id: 'f_struct', label: 'Master basic Data Structures (Arrays, Hash Maps)', detail: 'Understand indexing, searching, and time complexity', categoryTag: 'Data Structures' },
+      { id: 'f_habit', label: 'Establish a regular problem-solving habit', detail: 'Solve 1-2 problems consistently each week', categoryTag: 'Habit' },
+    ],
+  },
+  {
+    id: 'stage-4-project',
+    stepNumber: 4,
+    title: 'Build Your First Project',
+    subtitle: 'Turn what you have learned into something real.',
+    iconName: 'FolderPlus',
+    items: [
+      { id: 'f6', label: 'Build 1 simple working project', detail: 'A CLI tool, personal site, or utility application', categoryTag: 'Project' },
+      { id: 'f_git_proj', label: 'Use Git & GitHub properly with meaningful commits', detail: 'Maintain clean commit history and branch structure', categoryTag: 'Git' },
+      { id: 'f_doc', label: 'Document the project with a clean README.md', detail: 'Explain setup instructions, features, and usage', categoryTag: 'Docs' },
+      { id: 'f_pub', label: 'Publish your project live on GitHub', detail: 'Make repository public and pin it to your GitHub profile', categoryTag: 'Publish' },
+    ],
+  },
+  {
+    id: 'stage-5-nith',
+    stepNumber: 5,
+    title: 'Explore NITH & Get Involved',
+    subtitle: 'Discover the technical ecosystem around you and start participating.',
+    iconName: 'Users',
+    items: [
+      { id: 'f7', label: 'Attend Nimbus departmental team orientations', detail: 'Explore OJAS, VIBHAV, TEAM .EXE, C-HELIX, HERMETICA, MEDEXTROUS', categoryTag: 'Campus' },
+      { id: 'f_soc', label: 'Explore student technical societies', detail: 'Connect with App Team NITH, SPEC, CSEC, ISTE, Robotics Society, IEEE', categoryTag: 'Societies' },
+      { id: 'f_events', label: 'Attend campus workshops & hackathons', detail: 'Participate in beginner hackathons and tech sessions during Nimbus', categoryTag: 'Events' },
+      { id: 'f_labs', label: 'Learn how NITH technical ecosystem works', detail: 'Understand lab access rules, faculty guidance, and society teams', categoryTag: 'Ecosystem' },
+    ],
+  },
+  {
+    id: 'stage-6-levelup',
+    stepNumber: 6,
+    title: 'Level Up Your Skills',
+    subtitle: 'Go beyond the classroom and start developing your technical direction.',
+    iconName: 'Sparkles',
+    items: [
+      { id: 'f_beyond', label: 'Learn beyond mandatory academic coursework', detail: 'Study official documentation and modern developer tools', categoryTag: 'Self Learning' },
+      { id: 'f_quality', label: 'Improve code quality, debugging, and refactoring', detail: 'Write readable, well-structured, maintainable code', categoryTag: 'Quality' },
+      { id: 'f_identify', label: 'Identify your target technical domain', detail: 'Decide between Web Dev, AI/ML, Systems, Hardware, etc.', categoryTag: 'Domain' },
+    ],
+  },
+  {
+    id: 'stage-7-career',
+    stepNumber: 7,
+    title: 'Career Readiness',
+    subtitle: 'Start building the foundation of your technical profile.',
+    iconName: 'Briefcase',
+    items: [
+      { id: 'f_profile', label: 'Build a clean technical profile & resume outline', detail: 'Keep GitHub, LinkedIn, and project links updated', categoryTag: 'Profile' },
+      { id: 'f_repo', label: 'Maintain an active GitHub profile', detail: 'Ensure your repositories have clean code and documentation', categoryTag: 'GitHub' },
+      { id: 'f_intern', label: 'Explore technical internship requirements', detail: 'Understand placement patterns, DSA expectations, and dev stack skills', categoryTag: 'Career' },
+    ],
+  },
+  {
+    id: 'stage-8-balance',
+    stepNumber: 8,
+    title: 'Stay Balanced',
+    subtitle: 'Maintain strong academics while consistently developing technical skills.',
+    iconName: 'Shield',
+    items: [
+      { id: 'f8', label: 'Maintain CGPA > 7.5 / 8.0 while coding regularly', detail: 'Balance college exams, lab submissions, and self-learning', categoryTag: 'Academia' },
+      { id: 'f_burnout', label: 'Avoid burnout through consistent pacing', detail: 'Prioritize sleep, health, and sustainable daily habits', categoryTag: 'Wellbeing' },
+      { id: 'f_routine', label: 'Manage college responsibilities efficiently', detail: 'Keep lab assignments on track to free up weekend coding time', categoryTag: 'Routine' },
+    ],
+  },
+  {
+    id: 'stage-9-review',
+    stepNumber: 9,
+    title: 'Review & Reflect',
+    subtitle: 'Review what you have learned and decide what to focus on next.',
+    iconName: 'CheckSquare',
+    items: [
+      { id: 'f_rev', label: 'Review your 1st-year technical progress', detail: 'Evaluate completed projects, solved problems, and learned concepts', categoryTag: 'Review' },
+      { id: 'f_gaps', label: 'Identify technical strengths and knowledge gaps', detail: 'Pinpoint areas needing practice before 2nd year starts', categoryTag: 'Analysis' },
+      { id: 'f_next', label: 'Plan your 2nd-year technical direction & roadmap', detail: 'Select a dedicated goal roadmap to execute next', categoryTag: 'Next Steps' },
+    ],
+  },
+]

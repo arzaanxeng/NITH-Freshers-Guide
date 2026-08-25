@@ -1,0 +1,35 @@
+import { Resource } from '../types'
+
+export const controlAutomationResources: Resource[] = [
+  {
+    id: 'brian-douglas-control',
+    title: 'Control Systems Lectures & PID Intuition',
+    creator: 'Brian Douglas',
+    domain: 'control-automation',
+    topic: 'Classical Feedback & PID Control',
+    type: 'playlist',
+    level: 'intermediate',
+    description: 'The world\'s most acclaimed video series explaining transfer functions, Bode plots, gain margins, root locus, and intuitive PID loop tuning.',
+    url: 'https://www.youtube.com/playlist?list=PLUMWjy5jgHK1NC52DXXrriwihVrYZKqjk',
+    duration: '60+ Videos',
+    free: true,
+    tags: ['Control Systems', 'PID', 'Bode Plots', 'Brian Douglas'],
+    officialDocUrl: 'https://in.mathworks.com/help/control/',
+    isPrimary: true,
+  },
+  {
+    id: 'matlab-control-toolbox-docs',
+    title: 'MATLAB Control System Toolbox Documentation',
+    creator: 'MathWorks',
+    domain: 'control-automation',
+    topic: 'Linear Systems Analysis & Controller Tuning',
+    type: 'documentation',
+    level: 'intermediate',
+    description: 'Official API guides for analyzing dynamic systems, continuous/discrete transfer functions, state-space models, and automated PID tuner app.',
+    url: 'https://in.mathworks.com/help/control/getting-started-with-control-system-toolbox.html',
+    free: true,
+    tags: ['MATLAB', 'Control Toolbox', 'Official Documentation'],
+    officialDocUrl: 'https://in.mathworks.com/',
+    isPrimary: true,
+  },
+]
