@@ -1,0 +1,351 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+new file mode 100644
+index 0000000..208b49e
+--- /dev/null
++++ b/.github/workflows/ci.yml
+@@ -0,0 +1,42 @@
++name: CI
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++    branches: [main]
++  schedule:
++    # Every Monday 03:00 UTC — catches resources that quietly went dead
++    - cron: '0 3 * * 1'
++  workflow_dispatch: {}
++
++jobs:
++  build-and-check:
++    name: Build & data integrity
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-node@v4
++        with:
++          node-version: 20
++          cache: npm
++      - run: npm ci
++      - run: npm run verify-data
++      - run: npm run build
++
++  verify-links:
++    name: Verify resource links
++    # Only on the weekly schedule or a manual trigger — this hits the
++    # network per-resource and is slow, so it shouldn't gate every push.
++    # Run `npm run verify-links` locally before a PR that touches
++    # src/data/resources.
++    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-node@v4
++        with:
++          node-version: 20
++          cache: npm
++      - run: npm ci
++      - run: npm run verify-links
+diff --git a/index.html b/index.html
+index 3a2216a..2da93cb 100644
+--- a/index.html
++++ b/index.html
+@@ -6,6 +6,24 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>NITH Fresher's Guide · Honest Technical Maps & Curated Resources</title>
+     <meta name="description" content="A practical well-organized technical guide for NIT Hamirpur students to choose a direction, learn effectively, find real resources, and avoid freshman mistakes." />
++
++    <!-- TODO: replace with the real deployed URL once this is live -->
++    <link rel="canonical" href="https://freshmenguidearzaanxeng.netlify.app/" />
++
++    <!-- Open Graph (WhatsApp, Discord, LinkedIn, etc.) -->
++    <meta property="og:type" content="website" />
++    <meta property="og:site_name" content="NITH Fresher's Guide" />
++    <meta property="og:title" content="NITH Fresher's Guide · Honest Technical Maps & Curated Resources" />
++    <meta property="og:description" content="A practical, honest map of NIT Hamirpur's technical ecosystem: 20 domains, verified resources, goal-based roadmaps, and a senior reality check — written by a student, for students." />
++    <meta property="og:url" content="https://freshmenguidearzaanxeng.netlify.app/" />
++    <meta property="og:image" content="https://raw.githubusercontent.com/arzaanxeng/NITH-Freshers-Guide/main/view/Landing_page.png" />
++
++    <!-- Twitter/X Card -->
++    <meta name="twitter:card" content="summary_large_image" />
++    <meta name="twitter:title" content="NITH Fresher's Guide · Honest Technical Maps & Curated Resources" />
++    <meta name="twitter:description" content="A practical, honest map of NIT Hamirpur's technical ecosystem: 20 domains, verified resources, goal-based roadmaps, and a senior reality check." />
++    <meta name="twitter:image" content="https://raw.githubusercontent.com/arzaanxeng/NITH-Freshers-Guide/main/view/Landing_page.png" />
++
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+diff --git a/package.json b/package.json
+index 5dfea50..5c0d26c 100644
+--- a/package.json
++++ b/package.json
+@@ -6,9 +6,11 @@
+   "scripts": {
+     "dev": "vite",
+     "build": "tsc -b && vite build",
++    "postbuild": "cp dist/index.html dist/404.html",
+     "lint": "oxlint",
+     "preview": "vite preview",
+-    "verify-links": "tsx scripts/verify-links.ts"
++    "verify-links": "tsx scripts/verify-links.ts",
++    "verify-data": "tsx scripts/verify-data-integrity.ts"
+   },
+   "dependencies": {
+     "clsx": "^2.1.1",
+diff --git a/public/_redirects b/public/_redirects
+new file mode 100644
+index 0000000..ad37e2c
+--- /dev/null
++++ b/public/_redirects
+@@ -0,0 +1 @@
++/*    /index.html   200
+diff --git a/public/robots.txt b/public/robots.txt
+new file mode 100644
+index 0000000..6c9a0d2
+--- /dev/null
++++ b/public/robots.txt
+@@ -0,0 +1,4 @@
++User-agent: *
++Allow: /
++
++Sitemap: https://freshmenguidearzaanxeng.netlify.app/sitemap.xml
+diff --git a/public/sitemap.xml b/public/sitemap.xml
+new file mode 100644
+index 0000000..6061385
+--- /dev/null
++++ b/public/sitemap.xml
+@@ -0,0 +1,30 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/</loc><priority>1.0</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/explore</loc><priority>0.9</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/roadmaps</loc><priority>0.8</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/resources</loc><priority>0.8</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/checklists</loc><priority>0.7</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/reality-check</loc><priority>0.7</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/nith-ecosystem</loc><priority>0.7</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/ai-ml</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/app-development</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/ar-vr</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/cad-3d-design</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/computer-graphics</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/control-automation</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/cybersecurity</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/data-science</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/devops-cloud</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/dsa-cp</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/electronics-embedded</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/game-development</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/iot</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/open-source</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/power-electrical</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/research-computational</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/robotics</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/systems-programming</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/vlsi-semiconductor</loc><priority>0.6</priority></url>
++  <url><loc>https://freshmenguidearzaanxeng.netlify.app/domain/web-development</loc><priority>0.6</priority></url>
++</urlset>
+diff --git a/scripts/verify-data-integrity.ts b/scripts/verify-data-integrity.ts
+new file mode 100644
+index 0000000..81ef780
+--- /dev/null
++++ b/scripts/verify-data-integrity.ts
+@@ -0,0 +1,85 @@
++// Structural checks that don't need the network — catches broken
++// references introduced when adding/editing domains, resources,
++// roadmaps, or NITH clubs. Run this before verify-links (which does
++// need the network and is slow) so obvious content bugs fail fast.
++
++import { allDomains } from '../src/data/domains'
++import { allResources } from '../src/data/resources'
++import { goalRoadmaps } from '../src/data/roadmaps'
++import { nithClubs } from '../src/data/nith'
++
++const errors: string[] = []
++const warnings: string[] = []
++
++const domainIds = new Set(allDomains.map((d) => d.id))
++
++// 1. Duplicate IDs (breaks routing / React keys / search de-dup)
++function checkDuplicates(items: { id: string }[], label: string) {
++  const seen = new Set<string>()
++  for (const item of items) {
++    if (seen.has(item.id)) errors.push(`Duplicate ${label} id: "${item.id}"`)
++    seen.add(item.id)
++  }
++}
++checkDuplicates(allDomains, 'domain')
++checkDuplicates(allResources, 'resource')
++checkDuplicates(goalRoadmaps, 'roadmap')
++checkDuplicates(nithClubs, 'NITH club')
++
++// 2. Every resource must point at a domain that actually exists
++for (const res of allResources) {
++  if (!domainIds.has(res.domain)) {
++    errors.push(`Resource "${res.id}" references unknown domain "${res.domain}"`)
++  }
++  if (!res.url || !res.url.startsWith('http')) {
++    errors.push(`Resource "${res.id}" has a missing/invalid url: "${res.url}"`)
++  }
++}
++
++// 3. Every roadmap must point at a domain that actually exists
++for (const roadmap of goalRoadmaps) {
++  if (!domainIds.has(roadmap.domainId)) {
++    errors.push(`Roadmap "${roadmap.id}" references unknown domain "${roadmap.domainId}"`)
++  }
++  if (roadmap.phases.length === 0) {
++    warnings.push(`Roadmap "${roadmap.id}" has no phases`)
++  }
++}
++
++// 4. Every domain should have at least one resource, or it's a dead end
++// for anyone who lands on that page
++for (const domain of allDomains) {
++  const hasResources = allResources.some((r) => r.domain === domain.id)
++  if (!hasResources) warnings.push(`Domain "${domain.id}" has zero resources`)
++  if (domain.roadmapSteps.length === 0) warnings.push(`Domain "${domain.id}" has no roadmap steps`)
++  if (domain.projectIdeas.length === 0) warnings.push(`Domain "${domain.id}" has no project ideas`)
++}
++
++// 5. Resources marked verified should have a lastVerified date, and vice versa
++for (const res of allResources) {
++  if (res.verified && !res.lastVerified) {
++    warnings.push(`Resource "${res.id}" is marked verified but has no lastVerified date`)
++  }
++}
++
++console.log('\nNITH FRESHER\'S GUIDE')
++console.log('DATA INTEGRITY CHECK')
++console.log('──────────────────────────────────────────────────')
++console.log(`Domains: ${allDomains.length} | Resources: ${allResources.length} | Roadmaps: ${goalRoadmaps.length} | NITH entries: ${nithClubs.length}`)
++console.log('──────────────────────────────────────────────────\n')
++
++if (warnings.length > 0) {
++  console.log(`⚠ ${warnings.length} warning(s):`)
++  warnings.forEach((w) => console.log(`  - ${w}`))
++  console.log('')
++}
++
++if (errors.length > 0) {
++  console.error(`✗ ${errors.length} error(s):`)
++  errors.forEach((e) => console.error(`  - ${e}`))
++  console.error('\n🚨 Data integrity check failed.\n')
++  process.exit(1)
++} else {
++  console.log('🎉 All structural checks passed.\n')
++  process.exit(0)
++}
+diff --git a/src/App.tsx b/src/App.tsx
+index 2c07a54..e7ac391 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -11,10 +11,42 @@ import { ResourcesPage } from './pages/ResourcesPage'
+ import { ChecklistsPage } from './pages/ChecklistsPage'
+ import { RealityCheckPage } from './pages/RealityCheckPage'
+ import { NithEcosystemPage } from './pages/NithEcosystemPage'
++import { allDomains } from './data/domains'
++
++const KNOWN_PATHS = ['/', '/explore', '/roadmaps', '/resources', '/checklists', '/reality-check', '/nith-ecosystem']
++const DEFAULT_DOMAIN_ID = 'ai-ml'
++
++const PAGE_TITLES: Record<string, string> = {
++  '/': "NITH Fresher's Guide · Honest Technical Maps & Curated Resources",
++  '/explore': "Explore Domains · NITH Fresher's Guide",
++  '/roadmaps': "Goal-Based Roadmaps · NITH Fresher's Guide",
++  '/resources': "Curated Resources · NITH Fresher's Guide",
++  '/checklists': "First-Year Flowchart · NITH Fresher's Guide",
++  '/reality-check': "Reality Check · NITH Fresher's Guide",
++  '/nith-ecosystem': "NITH Ecosystem · NITH Fresher's Guide",
++}
++
++// Reads the current browser URL and turns it into in-app route state.
++// Falls back to home for anything unrecognized so a bad/old link never
++// shows a blank page.
++const parseLocation = (pathname: string): { currentPath: string; selectedDomainId: string } => {
++  if (pathname.startsWith('/domain/')) {
++    const id = pathname.replace('/domain/', '').split('/')[0]
++    const exists = allDomains.some((d) => d.id === id)
++    return { currentPath: '/domain', selectedDomainId: exists ? id : DEFAULT_DOMAIN_ID }
++  }
++  if (KNOWN_PATHS.includes(pathname)) {
++    return { currentPath: pathname, selectedDomainId: DEFAULT_DOMAIN_ID }
++  }
++  return { currentPath: '/', selectedDomainId: DEFAULT_DOMAIN_ID }
++}
++
++const urlFor = (path: string, domainId: string): string => (path === '/domain' ? `/domain/${domainId}` : path)
+ 
+ export function App() {
+-  const [currentPath, setCurrentPath] = useState<string>('/')
+-  const [selectedDomainId, setSelectedDomainId] = useState<string>('ai-ml')
++  const initial = parseLocation(window.location.pathname)
++  const [currentPath, setCurrentPath] = useState<string>(initial.currentPath)
++  const [selectedDomainId, setSelectedDomainId] = useState<string>(initial.selectedDomainId)
+   const [searchOpen, setSearchOpen] = useState<boolean>(false)
+ 
+   // Global Command-K keyboard shortcut listener
+@@ -29,18 +61,48 @@ export function App() {
+     return () => window.removeEventListener('keydown', handleKeyDown)
+   }, [])
+ 
+-  const handleNavigate = (path: string) => {
+-    if (path.startsWith('/domain/')) {
+-      const id = path.replace('/domain/', '')
+-      setSelectedDomainId(id)
+-      setCurrentPath('/domain')
++  // Support the browser back/forward buttons instead of trapping
++  // navigation entirely inside React state
++  useEffect(() => {
++    const handlePopState = () => {
++      const parsed = parseLocation(window.location.pathname)
++      setCurrentPath(parsed.currentPath)
++      setSelectedDomainId(parsed.selectedDomainId)
++      window.scrollTo({ top: 0, behavior: 'smooth' })
++    }
++    window.addEventListener('popstate', handlePopState)
++    return () => window.removeEventListener('popstate', handlePopState)
++  }, [])
++
++  // Keep the tab title (and therefore browser history entries + shared
++  // links) in sync with whatever page is actually showing
++  useEffect(() => {
++    if (currentPath === '/domain') {
++      const domain = allDomains.find((d) => d.id === selectedDomainId)
++      document.title = domain ? `${domain.name} · NITH Fresher's Guide` : PAGE_TITLES['/']
+     } else {
+-      setCurrentPath(path)
++      document.title = PAGE_TITLES[currentPath] ?? PAGE_TITLES['/']
+     }
++  }, [currentPath, selectedDomainId])
++
++  const handleNavigate = (path: string) => {
++    const nextDomainId = path.startsWith('/domain/') ? path.replace('/domain/', '') : selectedDomainId
++    const nextPath = path.startsWith('/domain/') ? '/domain' : path
++    const url = urlFor(nextPath, nextDomainId)
++
++    if (window.location.pathname !== url) {
++      window.history.pushState({}, '', url)
++    }
++    setSelectedDomainId(nextDomainId)
++    setCurrentPath(nextPath)
+     window.scrollTo({ top: 0, behavior: 'smooth' })
+   }
+ 
+   const handleSelectDomain = (id: string) => {
++    const url = urlFor('/domain', id)
++    if (window.location.pathname !== url) {
++      window.history.pushState({}, '', url)
++    }
+     setSelectedDomainId(id)
+     setCurrentPath('/domain')
+     window.scrollTo({ top: 0, behavior: 'smooth' })
+diff --git a/vercel.json b/vercel.json
+new file mode 100644
+index 0000000..0f32683
+--- /dev/null
++++ b/vercel.json
+@@ -0,0 +1,3 @@
++{
++  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
++}
