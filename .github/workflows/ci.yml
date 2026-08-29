@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Every Monday 03:00 UTC — catches resources that quietly went dead
+    - cron: '0 3 * * 1'
+  workflow_dispatch: {}
+
+jobs:
+  build-and-check:
+    name: Build & data integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run verify-data
+      - run: npm run build
+
+  verify-links:
+    name: Verify resource links
+    # Only on the weekly schedule or a manual trigger — this hits the
+    # network per-resource and is slow, so it shouldn't gate every push.
+    # Run `npm run verify-links` locally before a PR that touches
+    # src/data/resources.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run verify-links

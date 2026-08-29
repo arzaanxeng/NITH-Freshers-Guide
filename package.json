@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "cp dist/index.html dist/404.html",
     "lint": "oxlint",
     "preview": "vite preview",
-    "verify-links": "tsx scripts/verify-links.ts"
+    "verify-links": "tsx scripts/verify-links.ts",
+    "verify-data": "tsx scripts/verify-data-integrity.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
