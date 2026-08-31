@@ -14,11 +14,19 @@ interface VerificationReportItem {
   error?: string
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+// Statuses that mean "the provider is throttling/blocking this IP right now",
+// not "the resource is dead". Worth retrying with backoff before giving up.
+const TRANSIENT_STATUSES = new Set([403, 408, 429, 500, 502, 503, 504])
+
 async function verifySingleUrl(
   url: string,
-  retries = 2
+  retries = 3
 ): Promise<{ ok: boolean; status?: number; title?: string; author?: string; error?: string }> {
   const isYouTube = url.includes('youtube.com') || url.includes('youtu.be')
+  let lastStatus: number | undefined
+  let lastError: string | undefined
 
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
@@ -41,6 +49,10 @@ async function verifySingleUrl(
           return { ok: true, status: res.status, title: data.title, author: data.author_name }
         } else if (res.status === 404 || res.status === 400) {
           return { ok: false, status: res.status, error: `YouTube returned HTTP ${res.status}` }
+        } else {
+          // 429/403/5xx etc — record it and fall through to backoff+retry below
+          lastStatus = res.status
+          lastError = `YouTube returned HTTP ${res.status}`
         }
       } else {
         const controller = new AbortController()
@@ -62,18 +74,24 @@ async function verifySingleUrl(
           return { ok: true, status: res.status }
         } else if (res.status === 404) {
           return { ok: false, status: res.status, error: `HTTP 404 Not Found` }
+        } else {
+          // 429/403/5xx etc — record it and fall through to backoff+retry below
+          lastStatus = res.status
+          lastError = `HTTP ${res.status}`
         }
       }
     } catch (err: any) {
-      if (attempt === retries) {
-        return { ok: false, error: err.message || 'Network error' }
-      }
-      // Wait 1s before retry
-      await new Promise((r) => setTimeout(r, 1000))
+      lastError = err.message || 'Network error'
+    }
+
+    if (attempt < retries) {
+      // Exponential backoff: 1s, 2s, 4s... longer for known-transient statuses
+      const base = lastStatus && TRANSIENT_STATUSES.has(lastStatus) ? 2000 : 1000
+      await sleep(base * 2 ** attempt)
     }
   }
 
-  return { ok: false, error: 'Max retries reached' }
+  return { ok: false, status: lastStatus, error: lastError || 'Max retries reached' }
 }
 
 async function runVerification() {
@@ -82,8 +100,14 @@ async function runVerification() {
   console.log('──────────────────────────────────────────────────\n')
 
   const reportItems: VerificationReportItem[] = []
+  // GitHub Actions runners share a small pool of IPs, and YouTube's oEmbed
+  // endpoint in particular will start throttling if you hit it back-to-back
+  // with no gap. A small stagger avoids false failures in CI that never show
+  // up when running locally from a residential IP.
+  const REQUEST_STAGGER_MS = 400
 
   for (const res of allResources) {
+    if (reportItems.length > 0) await sleep(REQUEST_STAGGER_MS)
     const primaryCheck = await verifySingleUrl(res.url)
 
     if (primaryCheck.ok) {
@@ -120,6 +144,7 @@ async function runVerification() {
           type: res.type,
           url: res.url,
           status: 'FAILED',
+          httpStatus: fallbackCheck.status ?? primaryCheck.status,
           error: `Primary (${primaryCheck.error}) & Fallback (${fallbackCheck.error}) failed.`,
         })
       }
@@ -131,6 +156,7 @@ async function runVerification() {
         type: res.type,
         url: res.url,
         status: 'FAILED',
+        httpStatus: primaryCheck.status,
         error: primaryCheck.error || 'Link unavailable',
       })
     }
@@ -147,8 +173,9 @@ async function runVerification() {
       console.log(`  Status: FALLBACK USED -> ${item.fallbackUrl}`)
       console.log(`  Detail: ${item.info}`)
     } else {
+      const statusPart = item.httpStatus ? ` (HTTP ${item.httpStatus})` : ''
       console.log(`✗ ${item.creator} — ${item.title}`)
-      console.log(`  Status: FAILED | Error: ${item.error}`)
+      console.log(`  Status: FAILED${statusPart} | Error: ${item.error}`)
     }
     console.log('──────────────────────────────────────────────────')
   }
