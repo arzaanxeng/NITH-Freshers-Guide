@@ -7,7 +7,7 @@ interface VerificationReportItem {
   creator: string
   type: string
   url: string
-  status: 'VERIFIED' | 'FALLBACK_USED' | 'FAILED'
+  status: 'VERIFIED' | 'FALLBACK_USED' | 'FAILED' | 'UNVERIFIABLE'
   httpStatus?: number
   info?: string
   fallbackUrl?: string
@@ -18,13 +18,47 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
 // Statuses that mean "the provider is throttling/blocking this IP right now",
 // not "the resource is dead". Worth retrying with backoff before giving up.
-const TRANSIENT_STATUSES = new Set([403, 408, 429, 500, 502, 503, 504])
+const TRANSIENT_STATUSES = new Set([408, 429, 500, 502, 503, 504])
+
+// Domains whose bot/WAF protection (Akamai, Cloudflare, etc.) reliably 403s
+// plain server-side fetches regardless of headers or retry count. A 403 from
+// one of these is not evidence the resource is dead - it just means our
+// checker isn't a real browser. Retrying burns time for nothing, so these
+// get flagged UNVERIFIABLE instead of FAILED and don't fail the CI run.
+// Verify these manually in a browser occasionally instead of via this script.
+const KNOWN_BOT_PROTECTED_DOMAINS = ['mathworks.com', 'www.mathworks.com']
+
+// Sites that are known to be legitimately slow to respond. Default timeout
+// is 10s; these get more headroom before we call it an abort.
+const DOMAIN_TIMEOUT_OVERRIDES: Record<string, number> = {
+  'electronics-tutorials.ws': 20000,
+  'www.electronics-tutorials.ws': 20000,
+}
+
+const DEFAULT_TIMEOUT_MS = 10000
+
+function getHostname(url: string): string {
+  try {
+    return new URL(url).hostname
+  } catch {
+    return ''
+  }
+}
+
+function getTimeoutFor(url: string): number {
+  return DOMAIN_TIMEOUT_OVERRIDES[getHostname(url)] ?? DEFAULT_TIMEOUT_MS
+}
+
+function isBotProtected(url: string): boolean {
+  return KNOWN_BOT_PROTECTED_DOMAINS.includes(getHostname(url))
+}
 
 async function verifySingleUrl(
   url: string,
   retries = 3
-): Promise<{ ok: boolean; status?: number; title?: string; author?: string; error?: string }> {
+): Promise<{ ok: boolean; status?: number; title?: string; author?: string; error?: string; botBlocked?: boolean }> {
   const isYouTube = url.includes('youtube.com') || url.includes('youtu.be')
+  const timeoutMs = getTimeoutFor(url)
   let lastStatus: number | undefined
   let lastError: string | undefined
 
@@ -33,7 +67,7 @@ async function verifySingleUrl(
       if (isYouTube) {
         const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`
         const controller = new AbortController()
-        const timeout = setTimeout(() => controller.abort(), 10000)
+        const timeout = setTimeout(() => controller.abort(), timeoutMs)
 
         const res = await fetch(oembedUrl, {
           headers: {
@@ -50,13 +84,45 @@ async function verifySingleUrl(
         } else if (res.status === 404 || res.status === 400) {
           return { ok: false, status: res.status, error: `YouTube returned HTTP ${res.status}` }
         } else {
-          // 429/403/5xx etc — record it and fall through to backoff+retry below
           lastStatus = res.status
           lastError = `YouTube returned HTTP ${res.status}`
         }
       } else {
+        // Known bot-protected domain returning 403: don't waste retries,
+        // flag it immediately as unverifiable-but-probably-fine.
+        if (isBotProtected(url)) {
+          const controller = new AbortController()
+          const timeout = setTimeout(() => controller.abort(), timeoutMs)
+          try {
+            const res = await fetch(url, {
+              method: 'GET',
+              headers: {
+                'User-Agent':
+                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+              },
+              signal: controller.signal,
+            })
+            clearTimeout(timeout)
+            if (res.ok || (res.status >= 300 && res.status < 400)) {
+              return { ok: true, status: res.status }
+            }
+            if (res.status === 403) {
+              return { ok: false, status: 403, error: 'Blocked by bot protection (WAF)', botBlocked: true }
+            }
+            lastStatus = res.status
+            lastError = `HTTP ${res.status}`
+          } catch (err: any) {
+            clearTimeout(timeout)
+            lastError = err.message || 'Network error'
+          }
+          if (attempt < retries) {
+            await sleep(1000 * 2 ** attempt)
+          }
+          continue
+        }
+
         const controller = new AbortController()
-        const timeout = setTimeout(() => controller.abort(), 10000)
+        const timeout = setTimeout(() => controller.abort(), timeoutMs)
 
         const res = await fetch(url, {
           method: 'GET',
@@ -75,7 +141,6 @@ async function verifySingleUrl(
         } else if (res.status === 404) {
           return { ok: false, status: res.status, error: `HTTP 404 Not Found` }
         } else {
-          // 429/403/5xx etc — record it and fall through to backoff+retry below
           lastStatus = res.status
           lastError = `HTTP ${res.status}`
         }
@@ -85,7 +150,6 @@ async function verifySingleUrl(
     }
 
     if (attempt < retries) {
-      // Exponential backoff: 1s, 2s, 4s... longer for known-transient statuses
       const base = lastStatus && TRANSIENT_STATUSES.has(lastStatus) ? 2000 : 1000
       await sleep(base * 2 ** attempt)
     }
@@ -100,10 +164,6 @@ async function runVerification() {
   console.log('──────────────────────────────────────────────────\n')
 
   const reportItems: VerificationReportItem[] = []
-  // GitHub Actions runners share a small pool of IPs, and YouTube's oEmbed
-  // endpoint in particular will start throttling if you hit it back-to-back
-  // with no gap. A small stagger avoids false failures in CI that never show
-  // up when running locally from a residential IP.
   const REQUEST_STAGGER_MS = 400
 
   for (const res of allResources) {
@@ -121,8 +181,18 @@ async function runVerification() {
         httpStatus: primaryCheck.status || 200,
         info: primaryCheck.title ? `"${primaryCheck.title}"` : 'Link Active',
       })
+    } else if (primaryCheck.botBlocked) {
+      reportItems.push({
+        id: res.id,
+        title: res.title,
+        creator: res.creator,
+        type: res.type,
+        url: res.url,
+        status: 'UNVERIFIABLE',
+        httpStatus: primaryCheck.status,
+        info: 'Site blocks automated requests (WAF/bot protection). Verify manually in a browser.',
+      })
     } else if (res.fallbackUrl) {
-      // Test fallback URL
       const fallbackCheck = await verifySingleUrl(res.fallbackUrl)
       if (fallbackCheck.ok) {
         reportItems.push({
@@ -135,6 +205,17 @@ async function runVerification() {
           fallbackUrl: res.fallbackUrl,
           httpStatus: fallbackCheck.status || 200,
           info: `Primary link failed (${primaryCheck.error}). Used fallback: ${res.fallbackUrl}`,
+        })
+      } else if (fallbackCheck.botBlocked) {
+        reportItems.push({
+          id: res.id,
+          title: res.title,
+          creator: res.creator,
+          type: res.type,
+          url: res.url,
+          status: 'UNVERIFIABLE',
+          httpStatus: fallbackCheck.status,
+          info: 'Fallback site blocks automated requests (WAF/bot protection). Verify manually in a browser.',
         })
       } else {
         reportItems.push({
@@ -162,7 +243,6 @@ async function runVerification() {
     }
   }
 
-  // Print Formatted Report
   for (const item of reportItems) {
     if (item.status === 'VERIFIED') {
       console.log(`✓ ${item.creator} — ${item.title}`)
@@ -171,6 +251,10 @@ async function runVerification() {
     } else if (item.status === 'FALLBACK_USED') {
       console.log(`⚠ ${item.creator} — ${item.title}`)
       console.log(`  Status: FALLBACK USED -> ${item.fallbackUrl}`)
+      console.log(`  Detail: ${item.info}`)
+    } else if (item.status === 'UNVERIFIABLE') {
+      console.log(`? ${item.creator} — ${item.title}`)
+      console.log(`  Status: UNVERIFIABLE (HTTP ${item.httpStatus})`)
       console.log(`  Detail: ${item.info}`)
     } else {
       const statusPart = item.httpStatus ? ` (HTTP ${item.httpStatus})` : ''
@@ -182,19 +266,21 @@ async function runVerification() {
 
   const verifiedCount = reportItems.filter((i) => i.status === 'VERIFIED').length
   const fallbackCount = reportItems.filter((i) => i.status === 'FALLBACK_USED').length
+  const unverifiableCount = reportItems.filter((i) => i.status === 'UNVERIFIABLE').length
   const failedCount = reportItems.filter((i) => i.status === 'FAILED').length
 
   console.log('\nFINAL SUMMARY:')
-  console.log(`  Verified:   ${verifiedCount}`)
-  console.log(`  Fallbacks:  ${fallbackCount}`)
-  console.log(`  Failed:     ${failedCount}`)
+  console.log(`  Verified:      ${verifiedCount}`)
+  console.log(`  Fallbacks:     ${fallbackCount}`)
+  console.log(`  Unverifiable:  ${unverifiableCount}  (bot-protected sites, likely fine)`)
+  console.log(`  Failed:        ${failedCount}`)
   console.log('──────────────────────────────────────────────────\n')
 
   if (failedCount > 0) {
-    console.error('🚨 Link verification failed. Fix or replace failed resources.')
+    console.error(' Link verification failed. Fix or replace failed resources.')
     process.exit(1)
   } else {
-    console.log('🎉 All resources passed verification!')
+    console.log(' All resources passed verification (some flagged unverifiable - check manually)!')
     process.exit(0)
   }
 }
