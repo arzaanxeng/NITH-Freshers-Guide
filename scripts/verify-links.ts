@@ -21,12 +21,19 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const TRANSIENT_STATUSES = new Set([408, 429, 500, 502, 503, 504])
 
 // Domains whose bot/WAF protection (Akamai, Cloudflare, etc.) reliably 403s
-// plain server-side fetches regardless of headers or retry count. A 403 from
-// one of these is not evidence the resource is dead - it just means our
-// checker isn't a real browser. Retrying burns time for nothing, so these
-// get flagged UNVERIFIABLE instead of FAILED and don't fail the CI run.
+// or hangs on plain server-side fetches regardless of headers or retry count.
+// A 403 (or a timeout that never clears even with generous headroom) from one
+// of these is not evidence the resource is dead - it just means our checker
+// isn't a real browser. Retrying burns time for nothing, so these get flagged
+// UNVERIFIABLE instead of FAILED and don't fail the CI run.
 // Verify these manually in a browser occasionally instead of via this script.
-const KNOWN_BOT_PROTECTED_DOMAINS = ['mathworks.com', 'www.mathworks.com']
+//
+// Listed as registrable domains, not exact hostnames: MathWorks serves docs
+// off locale subdomains (in.mathworks.com, www.mathworks.com, etc.), so a
+// suffix match is required - an exact-match list silently misses any
+// subdomain that isn't spelled out, which is what let the two MathWorks
+// (in.mathworks.com) links fail CI instead of being flagged unverifiable.
+const KNOWN_BOT_PROTECTED_DOMAINS = ['mathworks.com', 'electronics-tutorials.ws']
 
 // Sites that are known to be legitimately slow to respond. Default timeout
 // is 10s; these get more headroom before we call it an abort.
@@ -50,7 +57,11 @@ function getTimeoutFor(url: string): number {
 }
 
 function isBotProtected(url: string): boolean {
-  return KNOWN_BOT_PROTECTED_DOMAINS.includes(getHostname(url))
+  const hostname = getHostname(url)
+  if (!hostname) return false
+  return KNOWN_BOT_PROTECTED_DOMAINS.some(
+    (domain) => hostname === domain || hostname.endsWith(`.${domain}`)
+  )
 }
 
 async function verifySingleUrl(
@@ -152,6 +163,20 @@ async function verifySingleUrl(
     if (attempt < retries) {
       const base = lastStatus && TRANSIENT_STATUSES.has(lastStatus) ? 2000 : 1000
       await sleep(base * 2 ** attempt)
+    }
+  }
+
+  // A bot-protected domain that never returned a clean 403 within the loop
+  // above (e.g. it hung/aborted every attempt instead, which is how some
+  // WAF/CDN challenge pages behave against non-browser clients) has still
+  // demonstrated the same "our checker isn't a real browser" problem, not a
+  // dead link. Flag it unverifiable rather than failing the build over it.
+  if (isBotProtected(url)) {
+    return {
+      ok: false,
+      status: lastStatus,
+      error: lastError || 'Max retries reached',
+      botBlocked: true,
     }
   }
 
