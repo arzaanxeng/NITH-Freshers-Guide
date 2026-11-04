@@ -1,25 +1,21 @@
 import React from 'react'
 import { SITE_CONFIG } from '../../data/config'
 
-interface FooterProps {
-  onNavigate: (path: string) => void
-}
-
-export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#FFFDF8] border-t border-[#D8D0C2] py-10 mt-16 text-[#4B4A46]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 rounded bg-[#171717] text-[#D9206E] font-display font-bold flex items-center justify-center text-xs">
+              <div className="w-6 h-6 rounded bg-[#171717] text-[#FF4D94] font-display font-bold flex items-center justify-center text-xs">
                 N
               </div>
               <span className="font-display font-bold text-base text-[#171717]">
                 {SITE_CONFIG.title}
               </span>
             </div>
-            <p className="text-xs text-[#77736B] leading-relaxed max-w-md">
+            <p className="text-sm text-[#625E56] leading-relaxed max-w-md">
               {SITE_CONFIG.subtitle} — A practical, honest, student-first technical map for National Institute of Technology Hamirpur students.
             </p>
             {/* Author Credit */}
@@ -32,26 +28,26 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h4 className="font-mono text-[11px] uppercase tracking-wider font-bold text-[#171717] mb-3">
               Quick Entry
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2 text-sm">
               <li>
-                <button onClick={() => onNavigate('/explore')} className="hover:text-[#D9206E] transition-colors">
+                <a href="/explore" className="hover:text-[#D9206E] transition-colors">
                   Explore Domains
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => onNavigate('/roadmaps')} className="hover:text-[#D9206E] transition-colors">
+                <a href="/roadmaps" className="hover:text-[#D9206E] transition-colors">
                   Goal Roadmaps
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => onNavigate('/resources')} className="hover:text-[#D9206E] transition-colors">
+                <a href="/resources" className="hover:text-[#D9206E] transition-colors">
                   Resource Directory
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => onNavigate('/checklists')} className="hover:text-[#D9206E] transition-colors">
-                  Learning Checklists
-                </button>
+                <a href="/checklists" className="hover:text-[#D9206E] transition-colors">
+                  First-Year Flowchart
+                </a>
               </li>
             </ul>
           </div>
@@ -60,32 +56,32 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h4 className="font-mono text-[11px] uppercase tracking-wider font-bold text-[#171717] mb-3">
               NITH & Reality
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2 text-sm">
               <li>
-                <button onClick={() => onNavigate('/reality-check')} className="hover:text-[#D9206E] transition-colors">
+                <a href="/reality-check" className="hover:text-[#D9206E] transition-colors">
                   Senior Reality Check
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => onNavigate('/nith-ecosystem')} className="hover:text-[#D9206E] transition-colors">
+                <a href="/nith-ecosystem" className="hover:text-[#D9206E] transition-colors">
                   Departmental Teams & Clubs
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => onNavigate('/domain/ai-ml')} className="hover:text-[#D9206E] transition-colors">
+                <a href="/domain/ai-ml" className="hover:text-[#D9206E] transition-colors">
                   Start AI / ML
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => onNavigate('/domain/electronics-embedded')} className="hover:text-[#D9206E] transition-colors">
+                <a href="/domain/electronics-embedded" className="hover:text-[#D9206E] transition-colors">
                   Start Electronics & Embedded
-                </button>
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-6 border-t border-[#D8D0C2] flex flex-col sm:flex-row items-center justify-between text-xs text-[#77736B] gap-4">
+        <div className="pt-6 border-t border-[#D8D0C2] flex flex-col sm:flex-row items-center justify-between text-sm text-[#625E56] gap-4">
           <p>
             © {new Date().getFullYear()} {SITE_CONFIG.title} • {SITE_CONFIG.subtitle}
           </p>

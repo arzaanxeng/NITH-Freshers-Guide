@@ -1,13 +1,13 @@
 import React from 'react'
-import { ArrowRight, Compass, Map, BookOpen, Cpu, ShieldAlert, Users, Code, CheckSquare, Sparkles, Terminal, HelpCircle, Briefcase, Brain, Wrench, GraduationCap } from 'lucide-react'
-import { softwareDomains, hardwareDomains, specializedDomains } from '../data/domains'
+import { Compass, Map, BookOpen, Cpu, ShieldAlert, Users, Code, CheckSquare, Sparkles, Terminal, HelpCircle, Briefcase, Brain, Wrench, GraduationCap } from 'lucide-react'
+import { softwareDomains, hardwareDomains, specializedDomains, allDomains } from '../data/domains'
+import { allResources } from '../data/resources'
+import { goalRoadmaps } from '../data/roadmaps'
+import { nithClubs } from '../data/nith'
+import { SITE_CONFIG } from '../data/config'
 import { realityPrinciples } from '../data/realityCheck'
 
-interface HomePageProps {
-  onNavigate: (path: string) => void
-}
-
-export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
+export const HomePage: React.FC = () => {
   return (
     <div className="space-y-12 pb-12">
       {/* Top Banner Ticker */}
@@ -15,14 +15,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#087F73] animate-pulse" />
           <span className="text-[#D9206E] font-bold">NITH TECHNICAL MAP:</span>
-          <span>Curated technical resources & senior field guide • Aug 2026 Edition</span>
+          <span>Curated technical resources & senior field guide • {SITE_CONFIG.edition}</span>
         </div>
-        <button
-          onClick={() => onNavigate('/reality-check')}
+        <a
+          href="/reality-check"
           className="underline text-[#D9206E] hover:text-[#FFFDF8] transition-colors"
         >
           Senior Reality Check →
-        </button>
+        </a>
       </div>
 
       {/* Hero Section (Section 5: Reduced Vertical Height by 20-30%) */}
@@ -40,7 +40,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 A Map for First Year.
               </h1>
 
-              <p className="text-sm sm:text-base text-[#4B4A46] leading-relaxed max-w-2xl">
+              <p className="text-base sm:text-lg text-[#4B4A46] leading-relaxed max-w-2xl">
                 A practical, honest guide to help NITH freshers decide{' '}
                 <strong className="text-[#171717]">what to learn</strong>,{' '}
                 <strong className="text-[#171717]">where to learn it from</strong>,{' '}
@@ -51,37 +51,37 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
             {/* Main Action Buttons */}
             <div className="pt-2 flex flex-wrap gap-2.5">
-              <button
-                onClick={() => onNavigate('/explore')}
-                className="px-4 py-2.5 bg-[#171717] hover:bg-[#D9206E] text-[#FFFDF8] font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5"
+              <a
+                href="/explore"
+                className="px-4 py-2.5 bg-[#171717] hover:bg-[#D9206E] text-[#FFFDF8] font-semibold text-sm rounded-lg transition-all flex items-center gap-1.5"
               >
                 <Compass className="w-4 h-4" />
                 Explore Domains
-              </button>
+              </a>
 
-              <button
-                onClick={() => onNavigate('/roadmaps')}
-                className="px-4 py-2.5 bg-[#EEE9DE] hover:bg-[#D8D0C2] text-[#171717] border border-[#D8D0C2] font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5"
+              <a
+                href="/roadmaps"
+                className="px-4 py-2.5 bg-[#EEE9DE] hover:bg-[#D8D0C2] text-[#171717] border border-[#D8D0C2] font-semibold text-sm rounded-lg transition-all flex items-center gap-1.5"
               >
                 <Map className="w-4 h-4 text-[#2856B6]" />
                 Explore Roadmaps
-              </button>
+              </a>
 
-              <button
-                onClick={() => onNavigate('/resources')}
-                className="px-4 py-2.5 bg-[#EEE9DE] hover:bg-[#D8D0C2] text-[#171717] border border-[#D8D0C2] font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5"
+              <a
+                href="/resources"
+                className="px-4 py-2.5 bg-[#EEE9DE] hover:bg-[#D8D0C2] text-[#171717] border border-[#D8D0C2] font-semibold text-sm rounded-lg transition-all flex items-center gap-1.5"
               >
                 <BookOpen className="w-4 h-4 text-[#087F73]" />
                 Browse Resources
-              </button>
+              </a>
 
-              <button
-                onClick={() => onNavigate('/checklists')}
-                className="px-4 py-2.5 bg-[#EEE9DE] hover:bg-[#D8D0C2] text-[#171717] border border-[#D8D0C2] font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5"
+              <a
+                href="/checklists"
+                className="px-4 py-2.5 bg-[#EEE9DE] hover:bg-[#D8D0C2] text-[#171717] border border-[#D8D0C2] font-semibold text-sm rounded-lg transition-all flex items-center gap-1.5"
               >
-                <CheckSquare className="w-4 h-4 text-[#D97706]" />
+                <CheckSquare className="w-4 h-4 text-[#B45309]" />
                 Checklists
-              </button>
+              </a>
             </div>
           </div>
 
@@ -95,9 +95,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </span>
               </div>
 
-              <div className="font-mono text-xs text-[#4B4A46] space-y-2 bg-[#EEE9DE]/60 p-3 rounded-lg border border-[#D8D0C2]">
+              <div className="font-mono text-sm text-[#4B4A46] space-y-2 bg-[#EEE9DE]/60 p-3 rounded-lg border border-[#D8D0C2]">
                 <div className="text-[#2856B6] font-bold">SOFTWARE & COMPUTING</div>
-                <div className="pl-2 space-y-0.5 text-[11px]">
+                <div className="pl-2 space-y-1 text-xs">
                   <div>├── AI / Machine Learning</div>
                   <div>├── Web Development</div>
                   <div>├── DSA & Competitive Prog.</div>
@@ -106,7 +106,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </div>
 
                 <div className="text-[#087F73] font-bold pt-2">HARDWARE & ENGINEERING</div>
-                <div className="pl-2 space-y-0.5 text-[11px]">
+                <div className="pl-2 space-y-1 text-xs">
                   <div>├── Embedded Systems</div>
                   <div>├── Robotics & ROS 2</div>
                   <div>├── VLSI & Semiconductor</div>
@@ -116,11 +116,28 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            <p className="text-[11px] font-mono text-[#77736B] leading-tight pt-2 border-t border-[#D8D0C2]">
+            <p className="text-[11px] font-mono text-[#625E56] leading-tight pt-2 border-t border-[#D8D0C2]">
               Equal focus on computing & physical engineering systems.
             </p>
           </div>
         </div>
+      </section>
+
+      {/* At-a-glance stats (derived from the data, so they can't go stale) */}
+      <section aria-label="Guide at a glance" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <dl className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { n: allDomains.length, label: 'Technical domains', href: '/explore', color: 'text-[#D9206E]' },
+            { n: allResources.length, label: 'Verified resources', href: '/resources', color: 'text-[#087F73]' },
+            { n: goalRoadmaps.length, label: 'Goal roadmaps', href: '/roadmaps', color: 'text-[#2856B6]' },
+            { n: nithClubs.length, label: 'NITH teams & fests', href: '/nith-ecosystem', color: 'text-[#B45309]' },
+          ].map((stat) => (
+            <a key={stat.label} href={stat.href} className="card-level-2 card-shadow-hover rounded-xl px-4 py-3 block">
+              <dd className={`font-display font-extrabold text-3xl leading-none ${stat.color}`}>{stat.n}</dd>
+              <dt className="text-sm text-[#4B4A46] mt-1">{stat.label}</dt>
+            </a>
+          ))}
+        </dl>
       </section>
 
       {/* "Where do I start?" Section (Section 7) */}
@@ -133,16 +150,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <h2 className="font-display font-bold text-2xl text-[#171717] mt-1">
               Where do I start?
             </h2>
-            <p className="text-xs text-[#77736B] mt-1">
+            <p className="text-sm text-[#625E56] mt-1">
               You do not need to know your specialization immediately. Pick the prompt that matches your current goal:
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Option 1 */}
-            <div
-              onClick={() => onNavigate('/roadmaps')}
-              className="bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
+            <a
+              href="/roadmaps"
+              className="block bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
             >
               <div className="flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-[#2856B6]" />
@@ -150,14 +167,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   I want an internship
                 </h3>
               </div>
-              <p className="text-xs text-[#4B4A46]">Follow our structured 10-12 week internship roadmaps for AI/ML, Web Dev, or DSA.</p>
+              <p className="text-sm text-[#4B4A46]">Follow our structured 10-12 week internship roadmaps for AI/ML, Web Dev, or DSA.</p>
               <span className="font-mono text-[11px] font-bold text-[#2856B6] block pt-1">Explore Internship Roadmaps →</span>
-            </div>
+            </a>
 
             {/* Option 2 */}
-            <div
-              onClick={() => onNavigate('/domain/dsa-cp')}
-              className="bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
+            <a
+              href="/domain/dsa-cp"
+              className="block bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
             >
               <div className="flex items-center gap-2">
                 <Code className="w-4 h-4 text-[#2856B6]" />
@@ -165,14 +182,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   I like coding & logic
                 </h3>
               </div>
-              <p className="text-xs text-[#4B4A46]">Master problem solving with C++ STL, arrays, trees, dynamic programming, and contests.</p>
+              <p className="text-sm text-[#4B4A46]">Master problem solving with C++ STL, arrays, trees, dynamic programming, and contests.</p>
               <span className="font-mono text-[11px] font-bold text-[#2856B6] block pt-1">Start DSA & CP →</span>
-            </div>
+            </a>
 
             {/* Option 3 */}
-            <div
-              onClick={() => onNavigate('/domain/ai-ml')}
-              className="bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
+            <a
+              href="/domain/ai-ml"
+              className="block bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
             >
               <div className="flex items-center gap-2">
                 <Brain className="w-4 h-4 text-[#D9206E]" />
@@ -180,14 +197,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   I like AI & data
                 </h3>
               </div>
-              <p className="text-xs text-[#4B4A46]">Build intelligent models with Python, NumPy, Pandas, Scikit-Learn, PyTorch, and FastAPI.</p>
+              <p className="text-sm text-[#4B4A46]">Build intelligent models with Python, NumPy, Pandas, Scikit-Learn, PyTorch, and FastAPI.</p>
               <span className="font-mono text-[11px] font-bold text-[#D9206E] block pt-1">Start AI & ML →</span>
-            </div>
+            </a>
 
             {/* Option 4 */}
-            <div
-              onClick={() => onNavigate('/domain/electronics-embedded')}
-              className="bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
+            <a
+              href="/domain/electronics-embedded"
+              className="block bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
             >
               <div className="flex items-center gap-2">
                 <Wrench className="w-4 h-4 text-[#087F73]" />
@@ -195,39 +212,39 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   I like physical hardware
                 </h3>
               </div>
-              <p className="text-xs text-[#4B4A46]">Wire microcontrollers (Arduino/ESP32), write Embedded C firmware, and design PCBs in KiCAD.</p>
+              <p className="text-sm text-[#4B4A46]">Wire microcontrollers (Arduino/ESP32), write Embedded C firmware, and design PCBs in KiCAD.</p>
               <span className="font-mono text-[11px] font-bold text-[#087F73] block pt-1">Explore Hardware & Embedded →</span>
-            </div>
+            </a>
 
             {/* Option 5 */}
-            <div
-              onClick={() => onNavigate('/domain/research-computational')}
-              className="bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
+            <a
+              href="/domain/research-computational"
+              className="block bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
             >
               <div className="flex items-center gap-2">
-                <GraduationCap className="w-4 h-4 text-[#D97706]" />
+                <GraduationCap className="w-4 h-4 text-[#B45309]" />
                 <h3 className="font-display font-bold text-sm text-[#171717] group-hover:text-[#D9206E]">
                   I want academic research
                 </h3>
               </div>
-              <p className="text-xs text-[#4B4A46]">Learn literature review methodology, LaTeX paper formatting in Overleaf, and paper publishing.</p>
-              <span className="font-mono text-[11px] font-bold text-[#D97706] block pt-1">Explore Academic Research →</span>
-            </div>
+              <p className="text-sm text-[#4B4A46]">Learn literature review methodology, LaTeX paper formatting in Overleaf, and paper publishing.</p>
+              <span className="font-mono text-[11px] font-bold text-[#B45309] block pt-1">Explore Academic Research →</span>
+            </a>
 
             {/* Option 6 */}
-            <div
-              onClick={() => onNavigate('/explore')}
-              className="bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
+            <a
+              href="/explore"
+              className="block bg-[#FFFDF8] border border-[#D8D0C2] p-4 rounded-xl hover:border-[#171717] hover:shadow-sm transition-all cursor-pointer space-y-2 group"
             >
               <div className="flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-[#77736B]" />
+                <HelpCircle className="w-4 h-4 text-[#625E56]" />
                 <h3 className="font-display font-bold text-sm text-[#171717] group-hover:text-[#D9206E]">
                   I have no idea where to start
                 </h3>
               </div>
-              <p className="text-xs text-[#4B4A46]">Browse all 20 technical domains categorized by difficulty, prerequisites, and timeline.</p>
-              <span className="font-mono text-[11px] font-bold text-[#171717] block pt-1">Browse All 20 Domains →</span>
-            </div>
+              <p className="text-sm text-[#4B4A46]">Browse all {allDomains.length} technical domains categorized by difficulty, prerequisites, and timeline.</p>
+              <span className="font-mono text-[11px] font-bold text-[#171717] block pt-1">Browse All {allDomains.length} Domains →</span>
+            </a>
           </div>
         </div>
       </section>
@@ -238,46 +255,46 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <h2 className="font-display font-bold text-xl text-[#171717]">
             Descriptive Entry Points
           </h2>
-          <button
-            onClick={() => onNavigate('/explore')}
+          <a
+            href="/explore"
             className="text-xs font-mono text-[#D9206E] hover:underline"
           >
             View All Domains →
-          </button>
+          </a>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
-          <button
-            onClick={() => onNavigate('/domain/ai-ml')}
+          <a
+            href="/domain/ai-ml"
             className="p-4 bg-[#FFFDF8] border border-[#D8D0C2] hover:border-[#171717] rounded-xl text-left transition-all space-y-1 group"
           >
             <div className="font-bold text-[#171717] group-hover:text-[#D9206E]">AI & Machine Learning</div>
-            <div className="text-[#77736B]">Build intelligent systems →</div>
-          </button>
+            <div className="text-[#625E56]">Build intelligent systems →</div>
+          </a>
 
-          <button
-            onClick={() => onNavigate('/domain/web-development')}
+          <a
+            href="/domain/web-development"
             className="p-4 bg-[#FFFDF8] border border-[#D8D0C2] hover:border-[#171717] rounded-xl text-left transition-all space-y-1 group"
           >
             <div className="font-bold text-[#171717] group-hover:text-[#2856B6]">Web Development</div>
-            <div className="text-[#77736B]">Build for the web →</div>
-          </button>
+            <div className="text-[#625E56]">Build for the web →</div>
+          </a>
 
-          <button
-            onClick={() => onNavigate('/domain/dsa-cp')}
+          <a
+            href="/domain/dsa-cp"
             className="p-4 bg-[#FFFDF8] border border-[#D8D0C2] hover:border-[#171717] rounded-xl text-left transition-all space-y-1 group"
           >
-            <div className="font-bold text-[#171717] group-hover:text-[#D97706]">DSA & CP</div>
-            <div className="text-[#77736B]">Master problem solving →</div>
-          </button>
+            <div className="font-bold text-[#171717] group-hover:text-[#B45309]">DSA & CP</div>
+            <div className="text-[#625E56]">Master problem solving →</div>
+          </a>
 
-          <button
-            onClick={() => onNavigate('/domain/electronics-embedded')}
+          <a
+            href="/domain/electronics-embedded"
             className="p-4 bg-[#FFFDF8] border border-[#D8D0C2] hover:border-[#171717] rounded-xl text-left transition-all space-y-1 group"
           >
             <div className="font-bold text-[#171717] group-hover:text-[#087F73]">Hardware & Embedded</div>
-            <div className="text-[#77736B]">Build physical systems →</div>
-          </button>
+            <div className="text-[#625E56]">Build physical systems →</div>
+          </a>
         </div>
       </section>
 
@@ -293,21 +310,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {softwareDomains.slice(0, 6).map((domain) => (
-              <div
+            {softwareDomains.map((domain) => (
+              <a
                 key={domain.id}
-                onClick={() => onNavigate(`/domain/${domain.id}`)}
-                className="card-level-2 rounded-xl p-4 cursor-pointer hover:border-[#171717] transition-all space-y-2 group"
+                href={`/domain/${domain.id}`}
+                className="block card-level-2 rounded-xl p-4 cursor-pointer hover:border-[#171717] transition-all space-y-2 group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase rounded bg-[#EEF3FB] text-[#2856B6]">
+                  <span className="px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded bg-[#EEF3FB] text-[#2856B6]">
                     {domain.difficulty}
                   </span>
-                  <span className="text-[10px] font-mono text-[#77736B]">Sequential Path</span>
+                  <span className="text-[11px] font-mono text-[#625E56]">Sequential Path</span>
                 </div>
                 <h3 className="font-display font-bold text-base text-[#171717] group-hover:text-[#2856B6]">{domain.name}</h3>
-                <p className="text-xs text-[#4B4A46] line-clamp-2">{domain.shortDescription}</p>
-              </div>
+                <p className="text-sm text-[#4B4A46] line-clamp-2">{domain.shortDescription}</p>
+              </a>
             ))}
           </div>
         </div>
@@ -319,27 +336,27 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <h2 className="font-display font-bold text-xl text-[#171717]">
               Hardware & Engineering Domains
             </h2>
-            <span className="px-2 py-0.5 text-[10px] font-mono uppercase bg-[#E8F5F4] text-[#087F73] font-bold rounded">
+            <span className="px-2 py-0.5 text-[11px] font-mono uppercase bg-[#E8F5F4] text-[#087F73] font-bold rounded">
               Equal Importance
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {hardwareDomains.map((domain) => (
-              <div
+              <a
                 key={domain.id}
-                onClick={() => onNavigate(`/domain/${domain.id}`)}
-                className="card-level-2 rounded-xl p-4 cursor-pointer hover:border-[#171717] transition-all space-y-2 group"
+                href={`/domain/${domain.id}`}
+                className="block card-level-2 rounded-xl p-4 cursor-pointer hover:border-[#171717] transition-all space-y-2 group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase rounded bg-[#E8F5F4] text-[#087F73]">
+                  <span className="px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded bg-[#E8F5F4] text-[#087F73]">
                     {domain.difficulty}
                   </span>
-                  <span className="text-[10px] font-mono text-[#77736B]">Sequential Path</span>
+                  <span className="text-[11px] font-mono text-[#625E56]">Sequential Path</span>
                 </div>
                 <h3 className="font-display font-bold text-base text-[#171717] group-hover:text-[#087F73]">{domain.name}</h3>
-                <p className="text-xs text-[#4B4A46] line-clamp-2">{domain.shortDescription}</p>
-              </div>
+                <p className="text-sm text-[#4B4A46] line-clamp-2">{domain.shortDescription}</p>
+              </a>
             ))}
           </div>
         </div>
@@ -347,7 +364,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         {/* 3. Specialized / Emerging */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 border-b border-[#D8D0C2] pb-2">
-            <Sparkles className="w-4 h-4 text-[#D97706]" />
+            <Sparkles className="w-4 h-4 text-[#B45309]" />
             <h2 className="font-display font-bold text-xl text-[#171717]">
               Specialized & Emerging Domains
             </h2>
@@ -355,20 +372,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {specializedDomains.map((domain) => (
-              <div
+              <a
                 key={domain.id}
-                onClick={() => onNavigate(`/domain/${domain.id}`)}
-                className="card-level-2 rounded-xl p-4 cursor-pointer hover:border-[#171717] transition-all space-y-2 group"
+                href={`/domain/${domain.id}`}
+                className="block card-level-2 rounded-xl p-4 cursor-pointer hover:border-[#171717] transition-all space-y-2 group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase rounded bg-[#FEF8EC] text-[#D97706]">
+                  <span className="px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded bg-[#FEF8EC] text-[#B45309]">
                     {domain.difficulty}
                   </span>
-                  <span className="text-[10px] font-mono text-[#77736B]">Sequential Path</span>
+                  <span className="text-[11px] font-mono text-[#625E56]">Sequential Path</span>
                 </div>
-                <h3 className="font-display font-bold text-base text-[#171717] group-hover:text-[#D97706]">{domain.name}</h3>
-                <p className="text-xs text-[#4B4A46] line-clamp-2">{domain.shortDescription}</p>
-              </div>
+                <h3 className="font-display font-bold text-base text-[#171717] group-hover:text-[#B45309]">{domain.name}</h3>
+                <p className="text-sm text-[#4B4A46] line-clamp-2">{domain.shortDescription}</p>
+              </a>
             ))}
           </div>
         </div>
@@ -385,17 +402,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <h3 className="font-display font-bold text-2xl text-[#171717]">
                 Unvarnished Senior Truths & Common Fresher Traps
               </h3>
-              <p className="text-xs text-[#4B4A46] max-w-2xl leading-relaxed">
+              <p className="text-sm text-[#4B4A46] max-w-2xl leading-relaxed">
                 "{realityPrinciples[0].seniorQuote}"
               </p>
             </div>
 
-            <button
-              onClick={() => onNavigate('/reality-check')}
+            <a
+              href="/reality-check"
               className="px-5 py-3 bg-[#171717] text-[#FFFDF8] hover:bg-[#D9206E] font-semibold text-xs font-mono rounded-xl transition-all flex-shrink-0"
             >
               Read All Senior Truths →
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -412,31 +429,31 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 Departmental Teams, Societies & Fests
               </h3>
             </div>
-            <button
-              onClick={() => onNavigate('/nith-ecosystem')}
-              className="px-4 py-2 bg-[#EEE9DE] hover:bg-[#171717] hover:text-[#FFFDF8] text-[#171717] font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5"
+            <a
+              href="/nith-ecosystem"
+              className="px-4 py-2 bg-[#EEE9DE] hover:bg-[#171717] hover:text-[#FFFDF8] text-[#171717] font-semibold text-sm rounded-lg transition-all flex items-center gap-1.5"
             >
               <Users className="w-4 h-4" />
               Explore NITH Ecosystem
-            </button>
+            </a>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
             <div className="p-3 bg-[#FFFDF8] border border-[#D8D0C2] rounded-lg">
               <span className="font-bold text-[#171717] block">OJAS</span>
-              <span className="text-[#77736B]">EE Dept Team</span>
+              <span className="text-[#625E56]">EE Dept Team</span>
             </div>
             <div className="p-3 bg-[#FFFDF8] border border-[#D8D0C2] rounded-lg">
               <span className="font-bold text-[#171717] block">VIBHAV</span>
-              <span className="text-[#77736B]">ECE Dept Team</span>
+              <span className="text-[#625E56]">ECE Dept Team</span>
             </div>
             <div className="p-3 bg-[#FFFDF8] border border-[#D8D0C2] rounded-lg">
               <span className="font-bold text-[#171717] block">TEAM .EXE</span>
-              <span className="text-[#77736B]">CSE Dept Team</span>
+              <span className="text-[#625E56]">CSE Dept Team</span>
             </div>
             <div className="p-3 bg-[#FFFDF8] border border-[#D8D0C2] rounded-lg">
               <span className="font-bold text-[#171717] block">App Team NITH</span>
-              <span className="text-[#77736B]">Core App/Web Club</span>
+              <span className="text-[#625E56]">Core App/Web Club</span>
             </div>
           </div>
         </div>

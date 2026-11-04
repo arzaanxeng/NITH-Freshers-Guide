@@ -5,3 +5,5 @@ export const SITE_CONFIG = {
   edition: "Aug 2026 Edition",
   githubUrl: "https://github.com/arzaanxeng/NITH-Freshers-Guide",
 }
+
+export const SITE_URL = "https://freshmenguidearzaanxeng.netlify.app"

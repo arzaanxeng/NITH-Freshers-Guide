@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { ExternalLink, Check, Copy, Sparkles, BookOpen, ShieldCheck } from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
+import { ExternalLink, Check, Copy, Sparkles, BookOpen, ShieldCheck, Clock } from 'lucide-react'
 import { Resource } from '../../data/types'
 
 interface ResourceCardProps {
@@ -9,10 +9,21 @@ interface ResourceCardProps {
 export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
   const [copied, setCopied] = useState(false)
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(resource.url)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(() => () => clearTimeout(timer.current), [])
+
+  // Only claim success if the copy actually worked (it rejects on
+  // non-HTTPS pages or when permission is denied).
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(resource.url)
+      setCopied(true)
+    } catch {
+      window.prompt('Copy this link:', resource.url)
+      return
+    }
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => setCopied(false), 2000)
   }
 
   const getLevelBadgeColor = (level: string) => {
@@ -36,7 +47,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
       case 'documentation':
         return 'bg-[#E8F5F4] text-[#087F73] border-[#BCE5E1]'
       case 'practice':
-        return 'bg-[#FEF8EC] text-[#D97706] border-[#FDE6B8]'
+        return 'bg-[#FEF8EC] text-[#B45309] border-[#FDE6B8]'
       default:
         return 'bg-[#EEE9DE] text-[#4B4A46] border-[#D8D0C2]'
     }
@@ -48,14 +59,14 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
         {/* Top Badges & Verification Indicator */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded border ${getTypeBadgeColor(resource.type)}`}>
+            <span className={`px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded border ${getTypeBadgeColor(resource.type)}`}>
               {resource.type}
             </span>
-            <span className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded border ${getLevelBadgeColor(resource.level)}`}>
+            <span className={`px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded border ${getLevelBadgeColor(resource.level)}`}>
               {resource.level}
             </span>
             {resource.isPrimary && (
-              <span className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-[#171717] text-[#D9206E]">
+              <span className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded bg-[#171717] text-[#FF4D94]">
                 <Sparkles className="w-2.5 h-2.5" /> Primary
               </span>
             )}
@@ -63,9 +74,9 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
 
           <button
             onClick={handleCopyLink}
-            className="p-1 rounded text-[#77736B] hover:text-[#171717] hover:bg-[#EEE9DE] transition-colors"
+            className="p-1.5 rounded text-[#625E56] hover:text-[#171717] hover:bg-[#EEE9DE] transition-colors"
             title="Copy link"
-            aria-label="Copy resource URL"
+            aria-label={copied ? 'Link copied' : `Copy link to ${resource.title}`}
           >
             {copied ? <Check className="w-3.5 h-3.5 text-[#087F73]" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
@@ -82,15 +93,21 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
         </h3>
 
         {/* Description */}
-        <p className="text-xs text-[#4B4A46] mt-2 line-clamp-3 leading-relaxed">
+        <p className="text-sm text-[#4B4A46] mt-2 line-clamp-4 leading-relaxed">
           {resource.description}
         </p>
+
+        {resource.duration && (
+          <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-mono text-[#625E56]">
+            <Clock className="w-3.5 h-3.5" /> {resource.duration}
+          </p>
+        )}
 
         {/* Tags */}
         {resource.tags && resource.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
             {resource.tags.map((tag) => (
-              <span key={tag} className="text-[10px] font-mono px-1.5 py-0.5 bg-[#EEE9DE] text-[#77736B] rounded">
+              <span key={tag} className="text-xs font-mono px-1.5 py-0.5 bg-[#EEE9DE] text-[#4B4A46] rounded">
                 #{tag}
               </span>
             ))}
@@ -101,7 +118,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
       {/* Footer Verification Badge & Action Buttons */}
       <div>
         {/* Verification Status (Section 19) */}
-        <div className="mt-3 pt-2 flex items-center justify-between text-[10px] font-mono text-[#77736B]">
+        <div className="mt-3 pt-2 flex items-center justify-between text-xs font-mono text-[#625E56]">
           <span className="flex items-center gap-1 text-[#087F73]">
             <ShieldCheck className="w-3 h-3" />
             {resource.official ? 'Official Reference Docs' : 'Verified Aug 2026'}
@@ -113,7 +130,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
             href={resource.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#FFFDF8] bg-[#171717] hover:bg-[#D9206E] rounded-lg transition-colors"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm font-semibold text-[#FFFDF8] bg-[#171717] hover:bg-[#D9206E] rounded-lg transition-colors"
           >
             Open Resource
             <ExternalLink className="w-3 h-3" />
@@ -124,7 +141,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
               href={resource.officialDocUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1 px-3 py-2 text-xs font-semibold text-[#171717] bg-[#EEE9DE] hover:bg-[#D8D0C2] border border-[#D8D0C2] rounded-lg transition-colors"
+              className="inline-flex items-center justify-center gap-1 px-3 py-2.5 text-sm font-semibold text-[#171717] bg-[#EEE9DE] hover:bg-[#D8D0C2] border border-[#D8D0C2] rounded-lg transition-colors"
               title="Official Reference Documentation"
             >
               <BookOpen className="w-3 h-3 text-[#087F73]" />

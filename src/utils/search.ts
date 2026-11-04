@@ -13,89 +13,119 @@ export interface SearchResultItem {
   tags?: string[]
 }
 
+const MAX_RESULTS = 15
+
+const clip = (text: string, max: number) => (text.length > max ? `${text.slice(0, max).trimEnd()}…` : text)
+
+/**
+ * Scores how well `tokens` match a record's fields. Every token must match
+ * somewhere (so "react roadmap" narrows instead of matching nothing), and
+ * matches in the title count far more than matches in descriptions.
+ * `fields` is ordered most-important first.
+ */
+const score = (tokens: string[], fields: (string | undefined)[]): number => {
+  const hay = fields.map((f) => (f ?? '').toLowerCase())
+  let total = 0
+  for (const token of tokens) {
+    let best = 0
+    hay.forEach((h, i) => {
+      if (!h.includes(token)) return
+      const weight = Math.max(1, 10 - i * 3) // field 0 → 10, 1 → 7, 2 → 4, rest → 1
+      const startsWord = h.startsWith(token) || h.includes(` ${token}`)
+      best = Math.max(best, weight + (startsWord ? 3 : 0) + (i === 0 && h === token ? 5 : 0))
+    })
+    if (best === 0) return 0
+    total += best
+  }
+  return total
+}
+
 export const searchAllItems = (query: string): SearchResultItem[] => {
-  const cleanQuery = query.trim().toLowerCase()
-  if (!cleanQuery) return []
+  const tokens = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  if (tokens.length === 0) return []
 
-  const results: SearchResultItem[] = []
+  const scored: { item: SearchResultItem; s: number }[] = []
 
-  // Search Domains
   for (const domain of allDomains) {
-    const match =
-      domain.name.toLowerCase().includes(cleanQuery) ||
-      domain.shortDescription.toLowerCase().includes(cleanQuery) ||
-      domain.category.toLowerCase().includes(cleanQuery) ||
-      domain.coreTechnologies.some(t => t.name.toLowerCase().includes(cleanQuery))
-
-    if (match) {
-      results.push({
-        id: `domain-${domain.id}`,
-        title: domain.name,
-        subtitle: `${domain.category.toUpperCase()} • ${domain.difficulty} • ${domain.shortDescription.slice(0, 75)}...`,
-        category: 'domain',
-        url: `/domain/${domain.id}`,
-        targetId: domain.id,
+    const s = score(tokens, [
+      domain.name,
+      domain.coreTechnologies.map((t) => t.name).join(' '),
+      domain.category,
+      domain.shortDescription,
+    ])
+    if (s > 0) {
+      scored.push({
+        s: s + 2, // domains get a small edge: they're the main way into the guide
+        item: {
+          id: `domain-${domain.id}`,
+          title: domain.name,
+          subtitle: `${domain.category.toUpperCase()} • ${domain.difficulty} • ${clip(domain.shortDescription, 75)}`,
+          category: 'domain',
+          url: `/domain/${domain.id}`,
+          targetId: domain.id,
+        },
       })
     }
   }
 
-  // Search Resources
   for (const resource of allResources) {
-    const match =
-      resource.title.toLowerCase().includes(cleanQuery) ||
-      resource.creator.toLowerCase().includes(cleanQuery) ||
-      resource.topic.toLowerCase().includes(cleanQuery) ||
-      resource.domain.toLowerCase().includes(cleanQuery) ||
-      (resource.tags && resource.tags.some(t => t.toLowerCase().includes(cleanQuery)))
-
-    if (match) {
-      results.push({
-        id: `resource-${resource.id}`,
-        title: resource.title,
-        subtitle: `Resource by ${resource.creator} (${resource.type.toUpperCase()}) • ${resource.domain}`,
-        category: 'resource',
-        url: resource.url,
-        tags: resource.tags,
+    const s = score(tokens, [
+      resource.title,
+      resource.creator,
+      (resource.tags ?? []).join(' '),
+      resource.topic,
+      resource.domain,
+    ])
+    if (s > 0) {
+      scored.push({
+        s,
+        item: {
+          id: `resource-${resource.id}`,
+          title: resource.title,
+          subtitle: `Resource by ${resource.creator} (${resource.type.toUpperCase()}) • ${resource.domain}`,
+          category: 'resource',
+          url: resource.url,
+          tags: resource.tags,
+        },
       })
     }
   }
 
-  // Search Roadmaps
   for (const roadmap of goalRoadmaps) {
-    const match =
-      roadmap.title.toLowerCase().includes(cleanQuery) ||
-      roadmap.targetRole.toLowerCase().includes(cleanQuery) ||
-      roadmap.description.toLowerCase().includes(cleanQuery)
-
-    if (match) {
-      results.push({
-        id: `roadmap-${roadmap.id}`,
-        title: roadmap.title,
-        subtitle: `Roadmap: ${roadmap.targetRole} (${roadmap.duration})`,
-        category: 'roadmap',
-        url: `/roadmaps`,
+    const s = score(tokens, [roadmap.title, roadmap.targetRole, roadmap.description])
+    if (s > 0) {
+      scored.push({
+        s,
+        item: {
+          id: `roadmap-${roadmap.id}`,
+          title: roadmap.title,
+          subtitle: `Roadmap: ${roadmap.targetRole} (${roadmap.duration})`,
+          category: 'roadmap',
+          // open the matching roadmap, not always the first tab
+          url: `/roadmaps?roadmap=${roadmap.id}`,
+        },
       })
     }
   }
 
-  // Search NITH Ecosystem
   for (const club of nithClubs) {
-    const match =
-      club.name.toLowerCase().includes(cleanQuery) ||
-      (club.fullName && club.fullName.toLowerCase().includes(cleanQuery)) ||
-      club.description.toLowerCase().includes(cleanQuery) ||
-      club.focusAreas.some(f => f.toLowerCase().includes(cleanQuery))
-
-    if (match) {
-      results.push({
-        id: `nith-${club.id}`,
-        title: club.fullName || club.name,
-        subtitle: `NITH ${club.type.replace('_', ' ').toUpperCase()} • ${club.description.slice(0, 70)}...`,
-        category: 'nith',
-        url: `/nith-ecosystem`,
+    const s = score(tokens, [club.name, club.fullName, club.focusAreas.join(' '), club.description])
+    if (s > 0) {
+      scored.push({
+        s,
+        item: {
+          id: `nith-${club.id}`,
+          title: club.fullName || club.name,
+          subtitle: `NITH ${club.type.replace(/_/g, ' ').toUpperCase()} • ${clip(club.description, 70)}`,
+          category: 'nith',
+          url: `/nith-ecosystem`,
+        },
       })
     }
   }
 
-  return results.slice(0, 12)
+  return scored
+    .sort((a, b) => b.s - a.s)
+    .slice(0, MAX_RESULTS)
+    .map((x) => x.item)
 }

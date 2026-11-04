@@ -43,11 +43,48 @@ body {
   font-family: var(--font-mono);
 }
 
-/* Accessible focus ring */
+/* Reader-selectable text size (see Navbar "Aa" control). All Tailwind
+   type and spacing is rem-based, so scaling the root scales everything. */
+html { scroll-padding-top: 5rem; }
+html[data-text-size='lg'] { font-size: 112.5%; }
+html[data-text-size='xl'] { font-size: 125%; }
+
+/* Accessible focus ring.
+   NOTE: no border-radius here — this rule is unlayered, so it beats
+   Tailwind's rounded-* utilities and used to snap every focused pill or
+   card to a 4px radius. */
 :focus-visible {
   outline: 2px solid var(--accent-pink);
   outline-offset: 2px;
-  border-radius: 4px;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--border-strong);
+  color: var(--surface-primary);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.skip-link:focus { top: 0.75rem; }
+
+/* Comfortable long-form reading: capped line length, relaxed leading */
+.reading {
+  max-width: 68ch;
+  line-height: 1.75;
+}
+
+/* Print: let students print a domain page or roadmap cleanly */
+@media print {
+  header, footer, .no-print { display: none !important; }
+  body, .min-h-screen { background: #fff !important; }
+  .card-level-1, .card-level-2 { box-shadow: none !important; break-inside: avoid; }
+  a[href^='http']::after { content: ' (' attr(href) ')'; font-size: 0.7em; color: #555; }
 }
 
 /* Reduced motion */

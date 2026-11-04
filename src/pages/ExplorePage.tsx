@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Search, Filter } from 'lucide-react'
 import { allDomains } from '../data/domains'
 import { DomainCard } from '../components/cards/DomainCard'
+import { useQueryState } from '../utils/useQueryState'
 
-interface ExplorePageProps {
-  onSelectDomain: (id: string) => void
-}
-
-export const ExplorePage: React.FC<ExplorePageProps> = ({ onSelectDomain }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
-  const [searchQuery, setSearchQuery] = useState<string>('')
+export const ExplorePage: React.FC = () => {
+  const [filters, setFilters, resetFilters] = useQueryState({ category: 'all', difficulty: 'all', q: '' })
+  const selectedCategory = filters.category
+  const selectedDifficulty = filters.difficulty
+  const searchQuery = filters.q
+  const setSelectedCategory = (v: string) => setFilters({ category: v })
+  const setSelectedDifficulty = (v: string) => setFilters({ difficulty: v })
+  const setSearchQuery = (v: string) => setFilters({ q: v })
 
   const filteredDomains = allDomains.filter((domain) => {
     const matchesCategory = selectedCategory === 'all' || domain.category === selectedCategory
@@ -43,19 +44,20 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onSelectDomain }) => {
       <div className="card-level-2 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-[#77736B] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#625E56] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            aria-label="Search domains"
             placeholder="Search domain or tech (e.g. Python, ESP32, React, Verilog)..."
-            className="w-full pl-9 pr-4 py-2 text-xs font-sans bg-[#EEE9DE] border border-[#D8D0C2] rounded-lg focus:outline-none focus:border-[#171717] text-[#171717]"
+            className="w-full pl-9 pr-4 py-2.5 text-sm font-sans bg-[#EEE9DE] border border-[#D8D0C2] rounded-lg focus:outline-none focus:border-[#171717] text-[#171717]"
           />
         </div>
 
         {/* Category & Difficulty Filters */}
         <div className="flex items-center gap-2 flex-wrap text-xs">
-          <div className="flex items-center gap-1 text-[#77736B] font-mono mr-1">
+          <div className="flex items-center gap-1 text-[#625E56] font-mono mr-1">
             <Filter className="w-3.5 h-3.5" /> Filter:
           </div>
 
@@ -64,7 +66,8 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onSelectDomain }) => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg font-mono uppercase font-bold text-[11px] transition-all ${
+              aria-pressed={selectedCategory === cat}
+              className={`px-3 py-1.5 rounded-lg font-mono uppercase font-bold text-xs transition-all ${
                 selectedCategory === cat
                   ? 'bg-[#171717] text-[#FFFDF8]'
                   : 'bg-[#EEE9DE] text-[#4B4A46] hover:bg-[#D8D0C2]'
@@ -74,13 +77,14 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onSelectDomain }) => {
             </button>
           ))}
 
-          <span className="text-[#D8D0C2]">|</span>
+          <span className="text-[#D8D0C2]" aria-hidden="true">|</span>
 
           {/* Difficulty Filter */}
           <select
             value={selectedDifficulty}
             onChange={(e) => setSelectedDifficulty(e.target.value)}
-            className="px-3 py-1.5 font-mono text-xs bg-[#EEE9DE] border border-[#D8D0C2] rounded-lg text-[#171717] focus:outline-none"
+            aria-label="Filter by difficulty"
+            className="w-full sm:w-auto max-w-full px-3 py-2 font-mono text-sm bg-[#EEE9DE] border border-[#D8D0C2] rounded-lg text-[#171717] focus:outline-none"
           >
             <option value="all">All Difficulties</option>
             <option value="beginner">Beginner</option>
@@ -90,16 +94,16 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onSelectDomain }) => {
         </div>
       </div>
 
+      <p className="text-sm font-mono text-[#625E56]" aria-live="polite">
+        Showing {filteredDomains.length} of {allDomains.length} domains
+      </p>
+
       {/* Domain Cards Grid */}
       {filteredDomains.length === 0 ? (
-        <div className="card-level-2 rounded-xl p-12 text-center text-[#77736B]">
+        <div className="card-level-2 rounded-xl p-12 text-center text-[#625E56]">
           <p className="font-medium text-sm">No domains match your filters.</p>
           <button
-            onClick={() => {
-              setSelectedCategory('all')
-              setSelectedDifficulty('all')
-              setSearchQuery('')
-            }}
+            onClick={resetFilters}
             className="mt-3 px-3 py-1.5 text-xs font-mono text-[#D9206E] border border-[#FCD4E2] rounded-lg hover:bg-[#FDF0F5]"
           >
             Reset Filters
@@ -108,7 +112,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onSelectDomain }) => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredDomains.map((domain) => (
-            <DomainCard key={domain.id} domain={domain} onSelect={onSelectDomain} />
+            <DomainCard key={domain.id} domain={domain} />
           ))}
         </div>
       )}
