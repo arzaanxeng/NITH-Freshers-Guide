@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
-import { AlertTriangle, ArrowRight, ArrowDown, Target, Workflow } from 'lucide-react'
+import React from 'react'
+import { AlertTriangle, ArrowRight, ArrowDown, Target, Workflow, Clock } from 'lucide-react'
 import { goalRoadmaps } from '../data/roadmaps'
+import { useQueryState } from '../utils/useQueryState'
 
-interface RoadmapsPageProps {
-  onNavigate: (path: string) => void
-}
-
-export const RoadmapsPage: React.FC<RoadmapsPageProps> = ({ onNavigate }) => {
-  const [selectedRoadmapId, setSelectedRoadmapId] = useState<string>(goalRoadmaps[0].id)
-  const currentRoadmap = goalRoadmaps.find((r) => r.id === selectedRoadmapId) || goalRoadmaps[0]
+export const RoadmapsPage: React.FC = () => {
+  // ?roadmap=<id> in the URL: shareable, and search results can deep-link to a roadmap
+  const [query, setQuery] = useQueryState({ roadmap: goalRoadmaps[0].id })
+  const setSelectedRoadmapId = (id: string) => setQuery({ roadmap: id })
+  // An unknown ?roadmap= value falls back to the first roadmap, and the tab highlight follows
+  const currentRoadmap = goalRoadmaps.find((r) => r.id === query.roadmap) || goalRoadmaps[0]
+  const selectedRoadmapId = currentRoadmap.id
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -33,7 +34,8 @@ export const RoadmapsPage: React.FC<RoadmapsPageProps> = ({ onNavigate }) => {
             <button
               key={rm.id}
               onClick={() => setSelectedRoadmapId(rm.id)}
-              className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all ${
+              aria-pressed={isSelected}
+              className={`px-4 py-2.5 rounded-lg text-sm font-mono font-bold transition-all ${
                 isSelected
                   ? 'bg-[#171717] text-[#FFFDF8] shadow-sm'
                   : 'bg-[#EEE9DE] text-[#4B4A46] hover:bg-[#D8D0C2] hover:text-[#171717]'
@@ -51,27 +53,27 @@ export const RoadmapsPage: React.FC<RoadmapsPageProps> = ({ onNavigate }) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D8D0C2]">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-[#EEF3FB] text-[#2856B6]">
+              <span className="px-2.5 py-0.5 text-[11px] font-mono font-bold uppercase rounded bg-[#EEF3FB] text-[#2856B6]">
                 {currentRoadmap.targetRole}
               </span>
-              <span className="text-xs font-mono text-[#77736B]">
-                Sequential Path
+              <span className="inline-flex items-center gap-1 text-xs font-mono text-[#625E56]">
+                <Clock className="w-3.5 h-3.5" /> {currentRoadmap.duration}
               </span>
             </div>
             <h2 className="font-display font-bold text-2xl text-[#171717]">
               {currentRoadmap.title}
             </h2>
-            <p className="text-xs text-[#4B4A46] mt-1">
+            <p className="text-base text-[#4B4A46] mt-2 leading-relaxed max-w-2xl">
               {currentRoadmap.description}
             </p>
           </div>
 
-          <button
-            onClick={() => onNavigate(`/domain/${currentRoadmap.domainId}`)}
+          <a
+            href={`/domain/${currentRoadmap.domainId}`}
             className="px-4 py-2 bg-[#171717] hover:bg-[#D9206E] text-[#FFFDF8] text-xs font-mono font-semibold rounded-lg transition-colors flex-shrink-0 flex items-center gap-1.5"
           >
             Explore Domain Page <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </a>
         </div>
 
         {/* Visual Sequential Workflow Bar (Desktop & Mobile) */}
@@ -87,7 +89,7 @@ export const RoadmapsPage: React.FC<RoadmapsPageProps> = ({ onNavigate }) => {
                   Phase {phase.phase}: {phase.name}
                 </div>
                 {idx < currentRoadmap.phases.length - 1 && (
-                  <span className="text-[#D9206E] font-bold text-sm">→</span>
+                  <span className="text-[#D9206E] font-bold text-sm" aria-hidden="true">→</span>
                 )}
               </React.Fragment>
             ))}
@@ -100,26 +102,31 @@ export const RoadmapsPage: React.FC<RoadmapsPageProps> = ({ onNavigate }) => {
             <React.Fragment key={phase.phase}>
               <div className="bg-[#FFFDF8] border border-[#D8D0C2] rounded-xl p-6 relative card-shadow-hover">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="w-8 h-8 rounded-full bg-[#171717] text-[#D9206E] font-mono font-bold text-sm flex items-center justify-center flex-shrink-0">
+                  <span className="w-8 h-8 rounded-full bg-[#171717] text-[#FF4D94] font-mono font-bold text-sm flex items-center justify-center flex-shrink-0">
                     P{phase.phase}
                   </span>
                   <h3 className="font-display font-bold text-lg text-[#171717]">
                     {phase.name}
                   </h3>
+                  {phase.timeline && (
+                    <span className="ml-auto inline-flex items-center gap-1 text-xs font-mono text-[#625E56] bg-[#EEE9DE] border border-[#D8D0C2] rounded px-2 py-0.5">
+                      <Clock className="w-3 h-3" /> {phase.timeline}
+                    </span>
+                  )}
                 </div>
 
-                <p className="text-xs text-[#4B4A46] leading-relaxed mb-4">
+                <p className="text-base text-[#4B4A46] leading-relaxed mb-4 reading">
                   {phase.summary}
                 </p>
 
                 {/* Topics Pills */}
                 <div className="mb-4">
-                  <span className="font-mono text-[10px] uppercase font-bold text-[#77736B] block mb-1.5">
+                  <span className="font-mono text-[11px] uppercase font-bold text-[#625E56] block mb-1.5">
                     Step Topics:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {phase.topics.map((t) => (
-                      <span key={t} className="px-2.5 py-1 text-[11px] font-mono bg-[#EEE9DE] border border-[#D8D0C2] text-[#171717] rounded-md font-medium">
+                      <span key={t} className="px-2.5 py-1 text-xs font-mono bg-[#EEE9DE] border border-[#D8D0C2] text-[#171717] rounded-md font-medium">
                         {t}
                       </span>
                     ))}
@@ -127,19 +134,19 @@ export const RoadmapsPage: React.FC<RoadmapsPageProps> = ({ onNavigate }) => {
                 </div>
 
                 {/* Milestone & Pitfalls */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-[#D8D0C2] text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-[#D8D0C2] text-sm">
                   <div className="bg-[#E8F5F4] border border-[#BCE5E1] p-3.5 rounded-lg text-[#087F73]">
-                    <span className="font-mono font-bold uppercase text-[10px] flex items-center gap-1 mb-0.5">
+                    <span className="font-mono font-bold uppercase text-[11px] flex items-center gap-1 mb-0.5">
                       <Target className="w-3.5 h-3.5 text-[#087F73]" /> Key Milestone Project
                     </span>
                     <p className="text-[#171717] font-medium">{phase.milestoneProject}</p>
                   </div>
 
                   <div className="bg-[#FDF0F5] border border-[#FCD4E2] p-3.5 rounded-lg text-[#9F1239]">
-                    <span className="font-mono font-bold uppercase text-[10px] flex items-center gap-1 mb-0.5">
+                    <span className="font-mono font-bold uppercase text-[11px] flex items-center gap-1 mb-0.5">
                       <AlertTriangle className="w-3.5 h-3.5 text-[#D9206E]" /> Pitfalls to Avoid
                     </span>
-                    <p className="text-[#881337]">{phase.pitfallsToAvoid.join(' • ')}</p>
+                    <ul className="text-[#881337] list-disc pl-4 space-y-0.5">{phase.pitfallsToAvoid.map((p) => <li key={p}>{p}</li>)}</ul>
                   </div>
                 </div>
               </div>
@@ -147,7 +154,7 @@ export const RoadmapsPage: React.FC<RoadmapsPageProps> = ({ onNavigate }) => {
               {/* Step Connector Arrow */}
               {idx < currentRoadmap.phases.length - 1 && (
                 <div className="flex items-center justify-center py-1">
-                  <div className="w-8 h-8 rounded-full bg-[#171717] text-[#D9206E] flex items-center justify-center border border-[#171717] shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-[#171717] text-[#FF4D94] flex items-center justify-center border border-[#171717] shadow-sm">
                     <ArrowDown className="w-4 h-4" />
                   </div>
                 </div>

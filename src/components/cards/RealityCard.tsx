@@ -12,13 +12,13 @@ export const RealityCard: React.FC<RealityCardProps> = ({ principle }) => {
       {/* Title & Category */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-[#FDF0F5] text-[#D9206E] border border-[#FCD4E2]">
+          <span className="px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded bg-[#FDF0F5] text-[#D9206E] border border-[#FCD4E2]">
             {principle.category}
           </span>
           <h3 className="font-display font-bold text-xl text-[#171717] mt-2 leading-tight">
             {principle.title}
           </h3>
-          <p className="font-mono text-xs text-[#D9206E] font-semibold mt-1">
+          <p className="font-mono text-sm text-[#C21A62] font-semibold mt-1">
             {principle.tagline}
           </p>
         </div>
@@ -31,24 +31,24 @@ export const RealityCard: React.FC<RealityCardProps> = ({ principle }) => {
       <div className="bg-[#EEE9DE]/60 border-l-4 border-[#D9206E] p-4 rounded-r-lg">
         <div className="flex gap-2">
           <Quote className="w-4 h-4 text-[#D9206E] flex-shrink-0 mt-0.5" />
-          <p className="text-xs italic text-[#171717] leading-relaxed">
+          <p className="text-base italic text-[#171717] leading-relaxed">
             "{principle.seniorQuote}"
           </p>
         </div>
       </div>
 
       {/* Trap vs Reality Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-base pt-2">
         <div className="bg-[#FDF0F5] border border-[#FCD4E2] p-3.5 rounded-lg text-[#9F1239]">
-          <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[11px] mb-1">
+          <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-xs mb-1.5">
             <AlertTriangle className="w-3.5 h-3.5 text-[#D9206E]" />
             The Common Trap
           </div>
-          <p className="leading-relaxed text-[#881337]">{principle.theTrap}</p>
+          <p className="leading-relaxed text-[#7F1030]">{principle.theTrap}</p>
         </div>
 
         <div className="bg-[#E8F5F4] border border-[#BCE5E1] p-3.5 rounded-lg text-[#087F73]">
-          <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[11px] mb-1">
+          <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-xs mb-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-[#087F73]" />
             The Senior Truth
           </div>
@@ -57,8 +57,8 @@ export const RealityCard: React.FC<RealityCardProps> = ({ principle }) => {
       </div>
 
       {/* Actionable Advice */}
-      <div className="bg-[#171717] text-[#FFFDF8] p-3.5 rounded-lg text-xs font-sans flex items-start gap-2">
-        <span className="font-mono text-[10px] font-bold uppercase bg-[#D9206E] text-[#FFFDF8] px-1.5 py-0.5 rounded flex-shrink-0 mt-0.5">
+      <div className="bg-[#171717] text-[#FFFDF8] p-4 rounded-lg text-base font-sans flex items-start gap-2">
+        <span className="font-mono text-xs font-bold uppercase bg-[#D9206E] text-[#FFFDF8] px-1.5 py-0.5 rounded flex-shrink-0 mt-0.5">
           Action Item
         </span>
         <p className="leading-relaxed">{principle.actionableAdvice}</p>

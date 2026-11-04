@@ -13,17 +13,17 @@ export const RealityCheckPage: React.FC = () => {
         <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#171717] mt-1">
           Unvarnished Truths & Common Fresher Traps
         </h1>
-        <p className="text-sm text-[#4B4A46] mt-2 max-w-2xl">
+        <p className="text-base text-[#4B4A46] mt-2 max-w-2xl leading-relaxed">
           Direct, honest advice from senior students. Avoid tutorial hell, certificate traps, trending tech hype, and false LinkedIn metrics.
         </p>
       </div>
 
       {/* Quick Senior Direct Statements Banner */}
-      <div className="bg-[#EEE9DE] border border-[#D8D0C2] rounded-xl p-5 font-mono text-xs text-[#171717] space-y-2">
-        <span className="font-bold uppercase tracking-wider text-[#D9206E] block mb-1">
+      <div className="bg-[#EEE9DE] border border-[#D8D0C2] rounded-xl p-5 text-[#171717] space-y-2">
+        <span className="font-mono text-sm font-bold uppercase tracking-wider text-[#C21A62] block mb-2">
           Direct Senior Statements:
         </span>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] text-[#4B4A46]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-base text-[#3F3D39]">
           <div>• Don't learn eight domains at once.</div>
           <div>• Certificates do not replace projects.</div>
           <div>• Tutorial completion is not skill.</div>

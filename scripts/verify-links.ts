@@ -1,5 +1,4 @@
 import { allResources } from '../src/data/resources'
-import { allDomains } from '../src/data/domains'
 
 interface VerificationReportItem {
   id: string
