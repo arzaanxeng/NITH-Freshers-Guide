@@ -15,7 +15,7 @@
   /* Ink Typography */
   --text-primary: #171717;
   --text-body: #4B4A46;
-  --text-muted: #77736B;
+  --text-muted: #6B675F; /* darkened from #77736B: was ~4.2:1 on --bg-page, now ~5:1 (WCAG AA) */
 
   /* Accents */
   --accent-pink: #D9206E;
@@ -123,10 +123,14 @@ html[data-text-size='xl'] { font-size: 125%; }
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
-.card-shadow-hover:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-strong);
-  box-shadow: 3px 3px 0 var(--border-strong);
+/* Hover-capable devices only: on touch screens :hover sticks after a tap and
+   leaves the card stuck in its raised state. */
+@media (hover: hover) {
+  .card-shadow-hover:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+    box-shadow: 3px 3px 0 var(--border-strong);
+  }
 }
 
 /* Scrollbar */
