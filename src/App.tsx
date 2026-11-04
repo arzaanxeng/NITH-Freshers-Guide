@@ -33,33 +33,49 @@ interface RouteState {
   currentPath: string
   selectedDomainId: string
   search: string
+  hash: string
 }
 
-// Turns the browser URL into route state. Unknown pages and unknown domain
-// ids now resolve to a real "not found" state instead of silently showing
-// the Home page / the AI-ML domain under the wrong URL.
-const parseLocation = (pathname: string, search = ''): RouteState => {
+// decodeURIComponent throws a URIError on malformed escapes such as
+// "/domain/%E0%A4%A". Called while the first state is computed, that used to
+// crash the whole app into a blank page, so decode defensively.
+const safeDecode = (value: string): string | null => {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return null
+  }
+}
+
+const NOT_FOUND: RouteState = { currentPath: '/not-found', selectedDomainId: '', search: '', hash: '' }
+
+// Turns the browser URL into route state. Unknown pages, empty/malformed
+// domain ids and unknown domain ids resolve to a real "not found" state
+// instead of silently showing the Home page under the wrong URL.
+const parseLocation = (pathname: string, search = '', hash = ''): RouteState => {
   // '/explore/' and '/explore' are the same page
-  const clean = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname
+  const clean = pathname.replace(/\/+$/, '') || '/'
   if (clean.startsWith('/domain/')) {
-    const id = decodeURIComponent(clean.replace('/domain/', '').split('/')[0])
-    return { currentPath: '/domain', selectedDomainId: id, search }
+    const id = safeDecode(clean.replace('/domain/', '').split('/')[0])
+    if (!id) return NOT_FOUND
+    return { currentPath: '/domain', selectedDomainId: id, search, hash }
   }
   if (KNOWN_PATHS.includes(clean)) {
-    return { currentPath: clean, selectedDomainId: '', search }
+    return { currentPath: clean, selectedDomainId: '', search, hash }
   }
-  return { currentPath: '/not-found', selectedDomainId: '', search: '' }
+  return NOT_FOUND
 }
 
 export function App() {
   const [route, setRoute] = useState<RouteState>(() =>
-    parseLocation(window.location.pathname, window.location.search),
+    parseLocation(window.location.pathname, window.location.search, window.location.hash),
   )
   const [searchOpen, setSearchOpen] = useState<boolean>(false)
   const mainRef = useRef<HTMLElement>(null)
-  const firstRender = useRef(true)
+  const prevPageKey = useRef<string | null>(null)
+  const prevHash = useRef<string>('')
 
-  const { currentPath, selectedDomainId, search } = route
+  const { currentPath, selectedDomainId, search, hash } = route
 
   // Global Cmd/Ctrl+K toggles search; "/" opens it when not typing.
   useEffect(() => {
@@ -83,7 +99,7 @@ export function App() {
   // Browser back/forward
   useEffect(() => {
     const handlePopState = () => {
-      setRoute(parseLocation(window.location.pathname, window.location.search))
+      setRoute(parseLocation(window.location.pathname, window.location.search, window.location.hash))
     }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
@@ -91,11 +107,14 @@ export function App() {
 
   const navigate = (to: string) => {
     const url = new URL(to, window.location.origin)
-    const next = `${url.pathname}${url.search}`
-    if (`${window.location.pathname}${window.location.search}` !== next) {
+    // Keep the #hash: it used to be dropped, so links like "/explore#web"
+    // landed on the page but never reached the section.
+    const next = `${url.pathname}${url.search}${url.hash}`
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`
+    if (current !== next) {
       window.history.pushState({}, '', next)
     }
-    setRoute(parseLocation(url.pathname, url.search))
+    setRoute(parseLocation(url.pathname, url.search, url.hash))
   }
 
   // Real <a href> links work with middle-click / "open in new tab" / copy
@@ -104,7 +123,7 @@ export function App() {
     const onClick = (e: MouseEvent) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
       const a = (e.target as HTMLElement | null)?.closest?.('a')
-      if (!a || a.target === '_blank' || a.hasAttribute('download')) return
+      if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return
       const href = a.getAttribute('href')
       if (!href || !href.startsWith('/') || href.startsWith('//')) return
       e.preventDefault()
@@ -115,33 +134,55 @@ export function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Title + canonical per page (the canonical used to point every page at
-  // the home page, which tells search engines they're all duplicates).
+  // Title + canonical per page. Unknown domains and the 404 page must not
+  // get a canonical URL: it used to point at "/domain/<bad-id>", or stay
+  // stuck on whatever page the visitor came from.
   useEffect(() => {
     let title = PAGE_TITLES[currentPath] ?? PAGE_TITLES['/']
-    let canonicalPath = currentPath
+    let canonicalPath: string | null = currentPath
     if (currentPath === '/domain') {
       const domain = allDomains.find((d) => d.id === selectedDomainId)
       title = domain ? `${domain.name} · NITH Fresher's Guide` : PAGE_TITLES['/not-found']
-      canonicalPath = `/domain/${selectedDomainId}`
+      canonicalPath = domain ? `/domain/${encodeURIComponent(domain.id)}` : null
+    } else if (currentPath === '/not-found') {
+      canonicalPath = null
     }
     document.title = title
     const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
-    if (canonical && currentPath !== '/not-found') canonical.href = `${SITE_URL}${canonicalPath === '/' ? '/' : canonicalPath}`
+    if (canonical) {
+      if (canonicalPath) canonical.href = `${SITE_URL.replace(/\/+$/, '')}${canonicalPath}`
+      else canonical.removeAttribute('href')
+    }
   }, [currentPath, selectedDomainId])
 
-  // On route change: jump to top (instantly — a long smooth scroll back up
-  // is disorienting) and move focus to <main> so keyboard / screen-reader
-  // users start at the new page instead of on a button that no longer exists.
-  const pathKey = `${currentPath}:${selectedDomainId}`
+  // On page change: jump to top (instantly — a long smooth scroll back up is
+  // disorienting) and move focus to <main> so keyboard / screen-reader users
+  // start at the new page. If the URL has a #hash, scroll to that element.
+  //
+  // Previous values live in refs (not a "first render" flag): React
+  // StrictMode runs effects twice in development, and the flag version
+  // treated that second run as a navigation and stole focus on page load.
+  const pageKey = `${currentPath}:${selectedDomainId}`
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false
+    const isInitial = prevPageKey.current === null
+    const pageChanged = !isInitial && prevPageKey.current !== pageKey
+    const hashChanged = prevHash.current !== hash
+    prevPageKey.current = pageKey
+    prevHash.current = hash
+
+    const id = hash ? safeDecode(hash.slice(1)) : null
+    const target = id ? document.getElementById(id) : null
+
+    if (isInitial) {
+      target?.scrollIntoView()
       return
     }
-    window.scrollTo({ top: 0, behavior: 'auto' })
-    mainRef.current?.focus({ preventScroll: true })
-  }, [pathKey])
+    if (!pageChanged && !hashChanged) return
+
+    if (target) target.scrollIntoView()
+    else if (pageChanged) window.scrollTo({ top: 0, behavior: 'auto' })
+    if (pageChanged) mainRef.current?.focus({ preventScroll: true })
+  }, [pageKey, hash])
 
   const renderCurrentPage = () => {
     switch (currentPath) {
