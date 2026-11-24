@@ -29,13 +29,13 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
   const getLevelBadgeColor = (level: string) => {
     switch (level) {
       case 'beginner':
-        return 'bg-[#E8F5F4] text-[#087F73] border-[#BCE5E1]'
+        return 'bg-[#E8F5F4] text-[#066B60] border-[#BCE5E1]'
       case 'intermediate':
         return 'bg-[#EEF3FB] text-[#2856B6] border-[#CBDCF7]'
       case 'advanced':
-        return 'bg-[#FDF0F5] text-[#D9206E] border-[#FCD4E2]'
+        return 'bg-[#FDF0F5] text-[#BE1A5F] border-[#FCD4E2]'
       default:
-        return 'bg-[#EEE9DE] text-[#4B4A46] border-[#D8D0C2]'
+        return 'bg-[#EEE9DE] text-[#3A3935] border-[#D8D0C2]'
     }
   }
 
@@ -43,13 +43,13 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
     switch (type) {
       case 'youtube':
       case 'playlist':
-        return 'bg-[#FDF0F5] text-[#D9206E] border-[#FCD4E2]'
+        return 'bg-[#FDF0F5] text-[#BE1A5F] border-[#FCD4E2]'
       case 'documentation':
-        return 'bg-[#E8F5F4] text-[#087F73] border-[#BCE5E1]'
+        return 'bg-[#E8F5F4] text-[#066B60] border-[#BCE5E1]'
       case 'practice':
         return 'bg-[#FEF8EC] text-[#B45309] border-[#FDE6B8]'
       default:
-        return 'bg-[#EEE9DE] text-[#4B4A46] border-[#D8D0C2]'
+        return 'bg-[#EEE9DE] text-[#3A3935] border-[#D8D0C2]'
     }
   }
 
@@ -59,14 +59,14 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
         {/* Top Badges & Verification Indicator */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className={`px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded border ${getTypeBadgeColor(resource.type)}`}>
+            <span className={`px-2 py-0.5 text-[0.75rem] font-mono font-bold uppercase rounded border ${getTypeBadgeColor(resource.type)}`}>
               {resource.type}
             </span>
-            <span className={`px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded border ${getLevelBadgeColor(resource.level)}`}>
+            <span className={`px-2 py-0.5 text-[0.75rem] font-mono font-bold uppercase rounded border ${getLevelBadgeColor(resource.level)}`}>
               {resource.level}
             </span>
             {resource.isPrimary && (
-              <span className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded bg-[#171717] text-[#FF4D94]">
+              <span className="flex items-center gap-1 px-2 py-0.5 text-[0.75rem] font-mono font-bold uppercase rounded bg-[#171717] text-[#FF4D94]">
                 <Sparkles className="w-2.5 h-2.5" /> Primary
               </span>
             )}
@@ -74,16 +74,16 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
 
           <button
             onClick={handleCopyLink}
-            className="p-1.5 rounded text-[#625E56] hover:text-[#171717] hover:bg-[#EEE9DE] transition-colors"
+            className="p-1.5 rounded text-[#55514A] hover:text-[#171717] hover:bg-[#EEE9DE] transition-colors"
             title="Copy link"
             aria-label={copied ? 'Link copied' : `Copy link to ${resource.title}`}
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-[#087F73]" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-[#066B60]" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
         </div>
 
         {/* Creator Attribution */}
-        <p className="font-mono text-xs text-[#D9206E] font-semibold tracking-wide uppercase">
+        <p className="font-mono text-xs text-[#BE1A5F] font-semibold tracking-wide uppercase">
           {resource.creator}
         </p>
 
@@ -93,12 +93,12 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
         </h3>
 
         {/* Description */}
-        <p className="text-sm text-[#4B4A46] mt-2 line-clamp-4 leading-relaxed">
+        <p className="text-[0.9375rem] text-[#3A3935] mt-2 line-clamp-4 leading-relaxed">
           {resource.description}
         </p>
 
         {resource.duration && (
-          <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-mono text-[#625E56]">
+          <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-mono text-[#55514A]">
             <Clock className="w-3.5 h-3.5" /> {resource.duration}
           </p>
         )}
@@ -107,7 +107,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
         {resource.tags && resource.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
             {resource.tags.map((tag) => (
-              <span key={tag} className="text-xs font-mono px-1.5 py-0.5 bg-[#EEE9DE] text-[#4B4A46] rounded">
+              <span key={tag} className="text-xs font-mono px-1.5 py-0.5 bg-[#EEE9DE] text-[#3A3935] rounded">
                 #{tag}
               </span>
             ))}
@@ -118,8 +118,8 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
       {/* Footer Verification Badge & Action Buttons */}
       <div>
         {/* Verification Status (Section 19) */}
-        <div className="mt-3 pt-2 flex items-center justify-between text-xs font-mono text-[#625E56]">
-          <span className="flex items-center gap-1 text-[#087F73]">
+        <div className="mt-3 pt-2 flex items-center justify-between text-xs font-mono text-[#55514A]">
+          <span className="flex items-center gap-1 text-[#066B60]">
             <ShieldCheck className="w-3 h-3" />
             {resource.official ? 'Official Reference Docs' : 'Verified Aug 2026'}
           </span>
@@ -144,7 +144,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
               className="inline-flex items-center justify-center gap-1 px-3 py-2.5 text-sm font-semibold text-[#171717] bg-[#EEE9DE] hover:bg-[#D8D0C2] border border-[#D8D0C2] rounded-lg transition-colors"
               title="Official Reference Documentation"
             >
-              <BookOpen className="w-3 h-3 text-[#087F73]" />
+              <BookOpen className="w-3 h-3 text-[#066B60]" />
               Docs
             </a>
           )}

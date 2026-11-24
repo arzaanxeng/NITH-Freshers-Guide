@@ -62,9 +62,9 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
   if (!domain) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-4">
-        <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#D9206E]">Domain not found</span>
+        <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#BE1A5F]">Domain not found</span>
         <h1 className="font-display font-bold text-3xl text-[#171717]">There's no domain called "{domainId}"</h1>
-        <p className="text-base text-[#4B4A46]">It may have been renamed. Pick one from the catalog:</p>
+        <p className="text-base text-[#3A3935]">It may have been renamed. Pick one from the catalog:</p>
         <a href="/explore" className="inline-flex items-center gap-2 mt-2 px-4 py-2.5 bg-[#171717] hover:bg-[#D9206E] text-[#FFFDF8] rounded-lg text-sm font-semibold transition-colors">
           <ArrowLeft className="w-4 h-4" /> Back to Domain Catalog
         </a>
@@ -78,7 +78,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <a href="/explore" className="inline-flex items-center gap-1.5 text-sm font-mono text-[#625E56] hover:text-[#171717] transition-colors mb-6">
+      <a href="/explore" className="inline-flex items-center gap-1.5 text-sm font-mono text-[#55514A] hover:text-[#171717] transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" /> Back to Domain Catalog
       </a>
 
@@ -88,7 +88,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
           aria-label="On this page"
           className="no-print mb-8 lg:mb-0 sticky top-[3.75rem] z-20 -mx-4 px-4 py-2 bg-[#F5F1E8]/95 backdrop-blur lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0 lg:top-24 lg:self-start lg:py-0 lg:h-fit"
         >
-          <p className="hidden lg:block font-mono text-xs font-bold uppercase tracking-wider text-[#625E56] mb-3">On this page</p>
+          <p className="hidden lg:block font-mono text-xs font-bold uppercase tracking-wider text-[#55514A] mb-3">On this page</p>
           <ul className="flex lg:flex-col gap-2 lg:gap-0.5 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0">
             {SECTIONS.map((s) => (
               <li key={s.id} className="flex-shrink-0">
@@ -102,7 +102,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
                   className={`block whitespace-nowrap px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border lg:border-0 lg:border-l-2 lg:rounded-none ${
                     active === s.id
                       ? 'bg-[#171717] text-[#FFFDF8] border-[#171717] lg:bg-transparent lg:text-[#171717] lg:border-[#D9206E] lg:font-bold'
-                      : 'bg-[#FFFDF8] text-[#4B4A46] border-[#D8D0C2] lg:bg-transparent lg:border-transparent hover:text-[#171717] lg:hover:border-[#D8D0C2]'
+                      : 'bg-[#FFFDF8] text-[#3A3935] border-[#D8D0C2] lg:bg-transparent lg:border-transparent hover:text-[#171717] lg:hover:border-[#D8D0C2]'
                   }`}
                 >
                   {s.label}
@@ -124,8 +124,8 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
                   {domain.difficulty} Level
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-sm font-mono text-[#625E56]">
-                <Workflow className="w-4 h-4 text-[#D9206E]" />
+              <div className="flex items-center gap-1.5 text-sm font-mono text-[#55514A]">
+                <Workflow className="w-4 h-4 text-[#BE1A5F]" />
                 <span>Sequential Learning Path</span>
               </div>
             </div>
@@ -143,7 +143,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-5 border-t border-[#D8D0C2]">
               <div>
                 <h2 className="font-mono text-sm font-bold uppercase text-[#171717] mb-3 flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-[#087F73]" /> What Is This Good For?
+                  <Award className="w-4 h-4 text-[#066B60]" /> What Is This Good For?
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {domain.goodFor.map((gf) => (
@@ -170,7 +170,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
           {/* Don't Start If... */}
           <section id="warning" className="bg-[#FDF0F5] border border-[#FCD4E2] rounded-xl p-6 space-y-4">
             <div className="flex items-start gap-2">
-              <ShieldAlert className="w-5 h-5 flex-shrink-0 mt-1 text-[#D9206E]" />
+              <ShieldAlert className="w-5 h-5 flex-shrink-0 mt-1 text-[#BE1A5F]" />
               <h2 className="font-display font-bold text-xl text-[#9F1239]">
                 Don't start {domain.name} if… <span className="font-normal text-base">(honest senior warning)</span>
               </h2>
@@ -178,7 +178,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
             <ul className="space-y-3 text-base text-[#7F1030] leading-relaxed">
               {domain.dontStartIf.map((warning, idx) => (
                 <li key={idx} className="flex items-start gap-2.5">
-                  <AlertTriangle className="w-4 h-4 text-[#D9206E] flex-shrink-0 mt-1" />
+                  <AlertTriangle className="w-4 h-4 text-[#BE1A5F] flex-shrink-0 mt-1" />
                   <span>{warning}</span>
                 </li>
               ))}
@@ -191,14 +191,14 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
               <Layers className="w-5 h-5 text-[#2856B6]" />
               <h2 className="font-display font-bold text-2xl text-[#171717]">What Do I Actually Need?</h2>
             </div>
-            <p className="text-base text-[#625E56] -mt-2">Technologies to learn, with official documentation.</p>
+            <p className="text-base text-[#55514A] -mt-2">Technologies to learn, with official documentation.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {domain.coreTechnologies.map((tech) => (
                 <div key={tech.name} className="card-level-2 rounded-xl p-5 flex flex-col justify-between">
                   <div>
                     <h3 className="font-display font-bold text-base text-[#171717]">{tech.name}</h3>
-                    <p className="text-sm text-[#4B4A46] mt-1.5 leading-relaxed">{tech.description}</p>
+                    <p className="text-[0.9375rem] text-[#3A3935] mt-1.5 leading-relaxed">{tech.description}</p>
                   </div>
                   {tech.docUrl && (
                     <div className="mt-3 pt-3 border-t border-[#D8D0C2]">
@@ -206,7 +206,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
                         href={tech.docUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm font-mono font-semibold text-[#087F73] hover:underline"
+                        className="inline-flex items-center gap-1 text-sm font-mono font-semibold text-[#066B60] hover:underline"
                       >
                         Official Reference Docs <ExternalLink className="w-3.5 h-3.5" />
                       </a>
@@ -221,7 +221,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
           <section id="roadmap" className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <Code className="w-5 h-5 text-[#D9206E]" />
+                <Code className="w-5 h-5 text-[#BE1A5F]" />
                 <h2 className="font-display font-bold text-2xl text-[#171717]">Sequential Workflow Roadmap</h2>
               </div>
               <a href="/roadmaps" className="text-sm font-mono text-[#C21A62] hover:underline">
@@ -240,7 +240,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                         <h3 className="font-display font-bold text-lg text-[#171717]">{step.title}</h3>
                         {step.duration && (
-                          <span className="inline-flex items-center gap-1 text-xs font-mono text-[#625E56] bg-[#EEE9DE] border border-[#D8D0C2] rounded px-2 py-0.5">
+                          <span className="inline-flex items-center gap-1 text-xs font-mono text-[#55514A] bg-[#EEE9DE] border border-[#D8D0C2] rounded px-2 py-0.5">
                             <Clock className="w-3 h-3" /> {step.duration}
                           </span>
                         )}
@@ -276,15 +276,15 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
           <section id="resources" className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-[#087F73]" />
+                <BookOpen className="w-5 h-5 text-[#066B60]" />
                 <h2 className="font-display font-bold text-2xl text-[#171717]">Curated Verified Resources</h2>
               </div>
-              <span className="font-mono text-sm text-[#625E56]">{resources.length} verified links</span>
+              <span className="font-mono text-sm text-[#55514A]">{resources.length} verified links</span>
             </div>
 
             {domain.primaryCreatorSpotlight && (
               <div className="bg-[#FDF0F5] border border-[#FCD4E2] rounded-xl p-5 flex items-start gap-3">
-                <Sparkles className="w-5 h-5 text-[#D9206E] flex-shrink-0 mt-0.5" />
+                <Sparkles className="w-5 h-5 text-[#BE1A5F] flex-shrink-0 mt-0.5" />
                 <div className="space-y-1.5">
                   <span className="font-mono font-bold uppercase text-[#C21A62] text-xs">Recommended Creator Spotlight</span>
                   <h3 className="font-display font-bold text-base text-[#171717]">{domain.primaryCreatorSpotlight.name}</h3>
@@ -316,10 +316,10 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
                       {project.level} Project
                     </span>
                     <h3 className="font-display font-bold text-lg text-[#171717] mt-2">{project.title}</h3>
-                    <p className="text-sm text-[#4B4A46] mt-2 leading-relaxed">{project.description}</p>
+                    <p className="text-[0.9375rem] text-[#3A3935] mt-2 leading-relaxed">{project.description}</p>
                   </div>
                   <div className="mt-4 pt-3 border-t border-[#D8D0C2]">
-                    <span className="font-mono text-xs uppercase text-[#625E56] block mb-1.5">Stack</span>
+                    <span className="font-mono text-xs uppercase text-[#55514A] block mb-1.5">Stack</span>
                     <div className="flex flex-wrap gap-1.5">
                       {project.techStack.map((tech) => (
                         <span key={tech} className="px-2 py-0.5 text-xs font-mono bg-[#EEE9DE] text-[#171717] rounded">
@@ -337,7 +337,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
           <nav aria-label="Other domains" className="no-print grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-[#D8D0C2]">
             {prev ? (
               <a href={`/domain/${prev.id}`} className="card-level-2 card-shadow-hover rounded-xl p-4 block group">
-                <span className="font-mono text-xs uppercase text-[#625E56] flex items-center gap-1">
+                <span className="font-mono text-xs uppercase text-[#55514A] flex items-center gap-1">
                   <ArrowLeft className="w-3.5 h-3.5" /> Previous domain
                 </span>
                 <span className="font-display font-bold text-base text-[#171717] group-hover:text-[#D9206E] mt-1 block">{prev.name}</span>
@@ -347,7 +347,7 @@ export const DomainDetailPage: React.FC<DomainDetailPageProps> = ({ domainId }) 
             )}
             {next && (
               <a href={`/domain/${next.id}`} className="card-level-2 card-shadow-hover rounded-xl p-4 block group sm:text-right">
-                <span className="font-mono text-xs uppercase text-[#625E56] flex items-center gap-1 sm:justify-end">
+                <span className="font-mono text-xs uppercase text-[#55514A] flex items-center gap-1 sm:justify-end">
                   Next domain <ArrowRight className="w-3.5 h-3.5" />
                 </span>
                 <span className="font-display font-bold text-base text-[#171717] group-hover:text-[#D9206E] mt-1 block">{next.name}</span>

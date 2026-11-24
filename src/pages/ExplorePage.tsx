@@ -29,13 +29,13 @@ export const ExplorePage: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
       <div>
-        <span className="font-mono text-xs text-[#D9206E] font-bold uppercase tracking-wider block">
+        <span className="font-mono text-xs text-[#BE1A5F] font-bold uppercase tracking-wider block">
           Technical Domain Catalog
         </span>
         <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#171717] mt-1">
           Explore Technical Directions
         </h1>
-        <p className="text-sm text-[#4B4A46] mt-2 max-w-2xl">
+        <p className="text-[0.9375rem] text-[#3A3935] mt-2 max-w-2xl">
           Comprehensive field guides covering Software, Hardware, and Specialized engineering fields. Every domain includes realistic timelines, prerequisites, curated resources, and project ideas.
         </p>
       </div>
@@ -44,7 +44,7 @@ export const ExplorePage: React.FC = () => {
       <div className="card-level-2 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-[#625E56] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#55514A] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
@@ -57,7 +57,7 @@ export const ExplorePage: React.FC = () => {
 
         {/* Category & Difficulty Filters */}
         <div className="flex items-center gap-2 flex-wrap text-xs">
-          <div className="flex items-center gap-1 text-[#625E56] font-mono mr-1">
+          <div className="flex items-center gap-1 text-[#55514A] font-mono mr-1">
             <Filter className="w-3.5 h-3.5" /> Filter:
           </div>
 
@@ -70,7 +70,7 @@ export const ExplorePage: React.FC = () => {
               className={`px-3 py-1.5 rounded-lg font-mono uppercase font-bold text-xs transition-all ${
                 selectedCategory === cat
                   ? 'bg-[#171717] text-[#FFFDF8]'
-                  : 'bg-[#EEE9DE] text-[#4B4A46] hover:bg-[#D8D0C2]'
+                  : 'bg-[#EEE9DE] text-[#3A3935] hover:bg-[#D8D0C2]'
               }`}
             >
               {cat}
@@ -94,17 +94,17 @@ export const ExplorePage: React.FC = () => {
         </div>
       </div>
 
-      <p className="text-sm font-mono text-[#625E56]" aria-live="polite">
+      <p className="text-sm font-mono text-[#55514A]" aria-live="polite">
         Showing {filteredDomains.length} of {allDomains.length} domains
       </p>
 
       {/* Domain Cards Grid */}
       {filteredDomains.length === 0 ? (
-        <div className="card-level-2 rounded-xl p-12 text-center text-[#625E56]">
+        <div className="card-level-2 rounded-xl p-12 text-center text-[#55514A]">
           <p className="font-medium text-sm">No domains match your filters.</p>
           <button
             onClick={resetFilters}
-            className="mt-3 px-3 py-1.5 text-xs font-mono text-[#D9206E] border border-[#FCD4E2] rounded-lg hover:bg-[#FDF0F5]"
+            className="mt-3 px-3 py-1.5 text-xs font-mono text-[#BE1A5F] border border-[#FCD4E2] rounded-lg hover:bg-[#FDF0F5]"
           >
             Reset Filters
           </button>

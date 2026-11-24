@@ -16,17 +16,17 @@ export const NithEcosystemPage: React.FC = () => {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs text-[#087F73] font-bold uppercase tracking-wider block">
+          <span className="font-mono text-xs text-[#066B60] font-bold uppercase tracking-wider block">
             NIT Hamirpur Student Guide
           </span>
-          <span className="px-2 py-0.5 text-[11px] font-mono font-bold uppercase bg-[#E8F5F4] text-[#087F73] border border-[#BCE5E1] rounded inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 text-[0.75rem] font-mono font-bold uppercase bg-[#E8F5F4] text-[#066B60] border border-[#BCE5E1] rounded inline-flex items-center gap-1">
             <ShieldCheck className="w-3 h-3" /> OFFICIAL SOURCE • Verified Aug 2026
           </span>
         </div>
         <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#171717] mt-1">
           NITH Technical Ecosystem & Clubs
         </h1>
-        <p className="text-base text-[#4B4A46] mt-2 max-w-2xl leading-relaxed">
+        <p className="text-base text-[#3A3935] mt-2 max-w-2xl leading-relaxed">
           An introduction to Nimbus departmental teams, student technical societies, major campus hackathons, and practical campus survival tips.
         </p>
       </div>
@@ -43,7 +43,7 @@ export const NithEcosystemPage: React.FC = () => {
       {/* Senior Survival Tips Section */}
       <div className="space-y-4">
         <h2 className="font-display font-bold text-2xl text-[#171717] flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-[#D9206E]" />
+          <Sparkles className="w-5 h-5 text-[#BE1A5F]" />
           Senior Campus Survival Tips
         </h2>
 
@@ -51,7 +51,7 @@ export const NithEcosystemPage: React.FC = () => {
           {seniorSurvivalTips.map((tip, idx) => (
             <div key={idx} className="card-level-2 rounded-xl p-5 space-y-1">
               <h3 className="font-display font-bold text-base text-[#171717]">{tip.title}</h3>
-              <p className="text-base text-[#4B4A46] leading-relaxed">{tip.tip}</p>
+              <p className="text-base text-[#3A3935] leading-relaxed">{tip.tip}</p>
             </div>
           ))}
         </div>
@@ -81,7 +81,7 @@ export const NithEcosystemPage: React.FC = () => {
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
                   selectedTab === tab.id
                     ? 'bg-[#171717] text-[#FFFDF8]'
-                    : 'bg-[#EEE9DE] text-[#4B4A46] hover:bg-[#D8D0C2]'
+                    : 'bg-[#EEE9DE] text-[#3A3935] hover:bg-[#D8D0C2]'
                 }`}
               >
                 {tab.label}

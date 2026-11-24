@@ -12,11 +12,11 @@ export const DomainCard: React.FC<DomainCardProps> = ({ domain }) => {
       case 'software':
         return 'bg-[#EEF3FB] text-[#2856B6] border-[#CBDCF7]'
       case 'hardware':
-        return 'bg-[#E8F5F4] text-[#087F73] border-[#BCE5E1]'
+        return 'bg-[#E8F5F4] text-[#066B60] border-[#BCE5E1]'
       case 'specialized':
         return 'bg-[#FEF8EC] text-[#B45309] border-[#FDE6B8]'
       default:
-        return 'bg-[#EEE9DE] text-[#4B4A46] border-[#D8D0C2]'
+        return 'bg-[#EEE9DE] text-[#3A3935] border-[#D8D0C2]'
     }
   }
 
@@ -28,10 +28,10 @@ export const DomainCard: React.FC<DomainCardProps> = ({ domain }) => {
       <div>
         {/* Top bar */}
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span className={`px-2 py-0.5 text-[11px] font-mono font-bold uppercase rounded border ${getCategoryBadge(domain.category)}`}>
+          <span className={`px-2 py-0.5 text-[0.75rem] font-mono font-bold uppercase rounded border ${getCategoryBadge(domain.category)}`}>
             {domain.category}
           </span>
-          <span className="text-xs font-mono text-[#625E56]">
+          <span className="text-xs font-mono text-[#55514A]">
             {domain.difficulty}
           </span>
         </div>
@@ -42,19 +42,19 @@ export const DomainCard: React.FC<DomainCardProps> = ({ domain }) => {
         </h3>
 
         {/* Short Description */}
-        <p className="text-sm text-[#4B4A46] mt-2 line-clamp-3 leading-relaxed">
+        <p className="text-[0.9375rem] text-[#3A3935] mt-2 line-clamp-3 leading-relaxed">
           {domain.shortDescription}
         </p>
 
         {/* Key Info Pills */}
-        <div className="mt-4 pt-3 border-t border-[#D8D0C2] space-y-1.5 text-sm text-[#4B4A46]">
+        <div className="mt-4 pt-3 border-t border-[#D8D0C2] space-y-1.5 text-[0.9375rem] text-[#3A3935]">
           <div className="flex items-center gap-1.5">
-            <Workflow className="w-3.5 h-3.5 text-[#D9206E]" />
-            <span className="font-mono text-[11px] truncate">Sequential Workflow Path</span>
+            <Workflow className="w-3.5 h-3.5 text-[#BE1A5F]" />
+            <span className="font-mono text-[0.75rem] truncate">Sequential Workflow Path</span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <Award className="w-3.5 h-3.5 text-[#087F73]" />
+            <Award className="w-3.5 h-3.5 text-[#066B60]" />
             <span className="truncate">Good for: {domain.goodFor.slice(0, 3).join(', ')}</span>
           </div>
 

@@ -87,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onOpenSearch }) => 
             <span className="font-display font-bold text-sm tracking-tight text-[#171717] block leading-none truncate">
               NITH Fresher's Guide
             </span>
-            <span className="font-mono text-[11px] uppercase text-[#625E56] tracking-wider hidden sm:block mt-0.5 truncate">
+            <span className="font-mono text-[0.75rem] uppercase text-[#55514A] tracking-wider hidden sm:block mt-0.5 truncate">
               Technical Map & Resources
             </span>
           </div>
@@ -103,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onOpenSearch }) => 
               className={`px-3 py-1.5 rounded-md text-sm font-semibold tracking-wide transition-all ${
                 isActive(item.path)
                   ? 'bg-[#171717] text-[#FFFDF8]'
-                  : 'text-[#4B4A46] hover:text-[#171717] hover:bg-[#EEE9DE]'
+                  : 'text-[#3A3935] hover:text-[#171717] hover:bg-[#EEE9DE]'
               }`}
             >
               {item.label}
@@ -127,19 +127,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onOpenSearch }) => 
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <button
             onClick={onOpenSearch}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-mono text-[#4B4A46] bg-[#EEE9DE] border border-[#D8D0C2] rounded-lg hover:border-[#171717] hover:text-[#171717] transition-all flex-shrink-0"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-mono text-[#3A3935] bg-[#EEE9DE] border border-[#D8D0C2] rounded-lg hover:border-[#171717] hover:text-[#171717] transition-all flex-shrink-0"
             aria-label={`Search guide (${isMac ? 'Command' : 'Control'} + K, or press /)`}
           >
-            <Search className="w-4 h-4 text-[#625E56] flex-shrink-0" />
+            <Search className="w-4 h-4 text-[#55514A] flex-shrink-0" />
             <span className="hidden md:inline">Search...</span>
-            <kbd className="hidden md:inline-block px-1.5 py-0.5 text-[11px] font-mono font-semibold bg-[#FFFDF8] border border-[#D8D0C2] rounded text-[#625E56] flex-shrink-0">
+            <kbd className="hidden md:inline-block px-1.5 py-0.5 text-[0.75rem] font-mono font-semibold bg-[#FFFDF8] border border-[#D8D0C2] rounded text-[#55514A] flex-shrink-0">
               {isMac ? '⌘K' : 'Ctrl K'}
             </kbd>
           </button>
 
           <button
             onClick={cycleTextSize}
-            className="px-2.5 py-1.5 text-sm font-bold text-[#4B4A46] bg-[#EEE9DE] border border-[#D8D0C2] rounded-lg hover:border-[#171717] hover:text-[#171717] transition-all flex-shrink-0 leading-none"
+            className="px-2.5 py-1.5 text-sm font-bold text-[#3A3935] bg-[#EEE9DE] border border-[#D8D0C2] rounded-lg hover:border-[#171717] hover:text-[#171717] transition-all flex-shrink-0 leading-none"
             aria-label={`Text size: ${sizeLabel}. Activate to change.`}
             title={`Text size: ${sizeLabel} (click to change)`}
           >
@@ -160,7 +160,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onOpenSearch }) => 
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-[#4B4A46] hover:text-[#171717] rounded-lg hover:bg-[#EEE9DE] flex-shrink-0"
+            className="lg:hidden p-2 text-[#3A3935] hover:text-[#171717] rounded-lg hover:bg-[#EEE9DE] flex-shrink-0"
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
@@ -187,7 +187,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onOpenSearch }) => 
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   isActive(item.path)
                     ? 'bg-[#171717] text-[#FFFDF8]'
-                    : 'text-[#4B4A46] hover:bg-[#EEE9DE] hover:text-[#171717]'
+                    : 'text-[#3A3935] hover:bg-[#EEE9DE] hover:text-[#171717]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
