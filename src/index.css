@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Type scale: Tailwind's default text-xs (12px) is too small for the mono
+   labels, tags and meta lines this site leans on. 13px with a roomier line
+   height reads noticeably better and still scales with the "Aa" control. */
+@theme {
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.25rem;
+}
+
 :root {
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Space Grotesk', 'Inter', sans-serif;
@@ -14,13 +22,18 @@
 
   /* Ink Typography */
   --text-primary: #171717;
-  --text-body: #4B4A46;
-  --text-muted: #6B675F; /* darkened from #77736B: was ~4.2:1 on --bg-page, now ~5:1 (WCAG AA) */
+  --text-body: #3A3935; /* ~11:1 on --bg-page (was #4B4A46, ~8:1) */
+  --text-muted: #55514A; /* ~6.7:1 on --bg-page (was #6B675F, ~5:1) */
 
-  /* Accents */
+  /* Accents. The base pink/teal are vivid but only ~4.2:1 as small text on
+     cream, so text uses the -text variants (>=5:1). Keep the base values
+     for fills, borders and large display type. */
   --accent-pink: #D9206E;
+  --accent-pink-text: #BE1A5F;
+  --accent-pink-on-dark: #FF4D94;
   --accent-pink-subtle: #FDF0F5;
   --accent-teal: #087F73;
+  --accent-teal-text: #066B60;
   --accent-teal-subtle: #E8F5F4;
   --accent-blue: #2856B6;
   --accent-blue-subtle: #EEF3FB;
@@ -32,7 +45,35 @@ body {
   font-family: var(--font-sans);
   background-color: var(--bg-page);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  /* Inter alternates: cv05 = lowercase l with a tail (tells l / I / 1 apart),
+     cv08 = serifed capital I. Ignored harmlessly if a font lacks them. */
+  font-feature-settings: 'cv05' 1, 'cv08' 1;
+}
+
+/* Typographic polish, in the base layer so any utility can still override */
+@layer base {
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p, li { text-wrap: pretty; }
+  strong, b { font-weight: 600; }
+  /* Tabular figures keep stat numbers and counts from jittering */
+  dd, kbd { font-variant-numeric: tabular-nums; }
+}
+
+/* Highlighter-pen underline for a key word in a headline. Subtle pink band
+   sits behind dark ink, so contrast stays at the full text colour. */
+.marker {
+  background-image: linear-gradient(
+    transparent 60%,
+    #FCD4E2 60%,
+    #FCD4E2 90%,
+    transparent 90%
+  );
+  padding: 0 0.12em;
+  margin: 0 -0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .font-display {

@@ -18,15 +18,15 @@ const CATEGORY_LABEL: Record<SearchResultItem['category'], string> = {
 const getCategoryIcon = (cat: string) => {
   switch (cat) {
     case 'domain':
-      return <Compass className="w-4 h-4 text-[#D9206E]" />
+      return <Compass className="w-4 h-4 text-[#BE1A5F]" />
     case 'resource':
-      return <BookOpen className="w-4 h-4 text-[#087F73]" />
+      return <BookOpen className="w-4 h-4 text-[#066B60]" />
     case 'roadmap':
       return <Map className="w-4 h-4 text-[#2856B6]" />
     case 'nith':
       return <Users className="w-4 h-4 text-[#B45309]" />
     default:
-      return <Search className="w-4 h-4 text-[#625E56]" />
+      return <Search className="w-4 h-4 text-[#55514A]" />
   }
 }
 
@@ -130,7 +130,7 @@ const SearchDialog: React.FC<Omit<SearchModalProps, 'isOpen'>> = ({ onClose, onN
       >
         {/* Search Input Bar */}
         <div className="flex items-center px-4 border-b border-[#D8D0C2] bg-[#FFFDF8]">
-          <Search className="w-5 h-5 text-[#625E56] mr-3 flex-shrink-0" />
+          <Search className="w-5 h-5 text-[#55514A] mr-3 flex-shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -152,14 +152,14 @@ const SearchDialog: React.FC<Omit<SearchModalProps, 'isOpen'>> = ({ onClose, onN
                 updateQuery('')
                 inputRef.current?.focus()
               }}
-              className="px-2 py-1 mr-1 rounded-md text-xs font-mono text-[#625E56] hover:text-[#171717] hover:bg-[#EEE9DE]"
+              className="px-2 py-1 mr-1 rounded-md text-xs font-mono text-[#55514A] hover:text-[#171717] hover:bg-[#EEE9DE]"
             >
               Clear
             </button>
           )}
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-[#625E56] hover:text-[#171717] hover:bg-[#EEE9DE]"
+            className="p-1 rounded-md text-[#55514A] hover:text-[#171717] hover:bg-[#EEE9DE]"
             aria-label="Close search"
           >
             <X className="w-5 h-5" />
@@ -173,8 +173,8 @@ const SearchDialog: React.FC<Omit<SearchModalProps, 'isOpen'>> = ({ onClose, onN
           </p>
 
           {query.trim() === '' ? (
-            <div className="p-6 text-center text-[#625E56] text-sm">
-              <p className="font-mono text-xs text-[#625E56] mb-2 uppercase tracking-wider">Quick Suggestions</p>
+            <div className="p-6 text-center text-[#55514A] text-sm">
+              <p className="font-mono text-xs text-[#55514A] mb-2 uppercase tracking-wider">Quick Suggestions</p>
               <div className="flex flex-wrap justify-center gap-2 mt-3">
                 {['CampusX', 'ESP32', 'React', 'DSA', 'Nimbus', 'Verilog', 'App Team'].map((term) => (
                   <button
@@ -183,7 +183,7 @@ const SearchDialog: React.FC<Omit<SearchModalProps, 'isOpen'>> = ({ onClose, onN
                       updateQuery(term)
                       inputRef.current?.focus()
                     }}
-                    className="px-3 py-1.5 text-sm font-mono bg-[#EEE9DE] hover:bg-[#171717] hover:text-[#FFFDF8] rounded-md border border-[#D8D0C2] transition-all text-[#4B4A46]"
+                    className="px-3 py-1.5 text-sm font-mono bg-[#EEE9DE] hover:bg-[#171717] hover:text-[#FFFDF8] rounded-md border border-[#D8D0C2] transition-all text-[#3A3935]"
                   >
                     {term}
                   </button>
@@ -191,7 +191,7 @@ const SearchDialog: React.FC<Omit<SearchModalProps, 'isOpen'>> = ({ onClose, onN
               </div>
             </div>
           ) : results.length === 0 ? (
-            <div className="p-8 text-center text-[#625E56]">
+            <div className="p-8 text-center text-[#55514A]">
               <p className="font-medium text-base">No results matching "{query}"</p>
               <p className="text-sm mt-1">Try a technology, domain, creator, or NITH club name.</p>
             </div>
@@ -218,14 +218,14 @@ const SearchDialog: React.FC<Omit<SearchModalProps, 'isOpen'>> = ({ onClose, onN
                         <div className="flex items-center gap-2">
                           <span className="font-semibold text-sm tracking-tight truncate">{item.title}</span>
                           <span
-                            className={`px-1.5 py-0.5 text-[11px] font-mono uppercase rounded font-bold flex-shrink-0 ${
-                              isSelected ? 'bg-[#D9206E] text-[#FFFDF8]' : 'bg-[#EEE9DE] text-[#4B4A46]'
+                            className={`px-1.5 py-0.5 text-[0.75rem] font-mono uppercase rounded font-bold flex-shrink-0 ${
+                              isSelected ? 'bg-[#D9206E] text-[#FFFDF8]' : 'bg-[#EEE9DE] text-[#3A3935]'
                             }`}
                           >
                             {CATEGORY_LABEL[item.category]}
                           </span>
                         </div>
-                        <p className={`text-xs truncate mt-0.5 ${isSelected ? 'text-[#EEE9DE]' : 'text-[#625E56]'}`}>
+                        <p className={`text-xs truncate mt-0.5 ${isSelected ? 'text-[#EEE9DE]' : 'text-[#55514A]'}`}>
                           {item.subtitle}
                         </p>
                       </div>
@@ -233,9 +233,9 @@ const SearchDialog: React.FC<Omit<SearchModalProps, 'isOpen'>> = ({ onClose, onN
 
                     <div className="flex-shrink-0">
                       {item.category === 'resource' ? (
-                        <ExternalLink className={`w-4 h-4 ${isSelected ? 'text-[#FF4D94]' : 'text-[#625E56]'}`} />
+                        <ExternalLink className={`w-4 h-4 ${isSelected ? 'text-[#FF4D94]' : 'text-[#55514A]'}`} />
                       ) : (
-                        <ArrowRight className={`w-4 h-4 ${isSelected ? 'text-[#FF4D94]' : 'text-[#625E56]'}`} />
+                        <ArrowRight className={`w-4 h-4 ${isSelected ? 'text-[#FF4D94]' : 'text-[#55514A]'}`} />
                       )}
                     </div>
                   </div>
@@ -246,7 +246,7 @@ const SearchDialog: React.FC<Omit<SearchModalProps, 'isOpen'>> = ({ onClose, onN
         </div>
 
         {/* Shortcut hints (hidden on touch-width screens) */}
-        <div className="hidden sm:flex px-4 py-2 bg-[#EEE9DE] border-t border-[#D8D0C2] items-center justify-between text-xs font-mono text-[#625E56]">
+        <div className="hidden sm:flex px-4 py-2 bg-[#EEE9DE] border-t border-[#D8D0C2] items-center justify-between text-xs font-mono text-[#55514A]">
           <span>
             <kbd className="px-1 py-0.5 bg-[#FFFDF8] border border-[#D8D0C2] rounded">↑</kbd>{' '}
             <kbd className="px-1 py-0.5 bg-[#FFFDF8] border border-[#D8D0C2] rounded">↓</kbd> navigate

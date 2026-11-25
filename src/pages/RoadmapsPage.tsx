@@ -21,7 +21,7 @@ export const RoadmapsPage: React.FC = () => {
         <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#171717] mt-1">
           Step-by-Step Learning Workflows
         </h1>
-        <p className="text-sm text-[#4B4A46] mt-2 max-w-2xl">
+        <p className="text-[0.9375rem] text-[#3A3935] mt-2 max-w-2xl">
           Goal-oriented sequential roadmaps focused on milestone progression. Follow the workflow step by step at your own pace.
         </p>
       </div>
@@ -38,7 +38,7 @@ export const RoadmapsPage: React.FC = () => {
               className={`px-4 py-2.5 rounded-lg text-sm font-mono font-bold transition-all ${
                 isSelected
                   ? 'bg-[#171717] text-[#FFFDF8] shadow-sm'
-                  : 'bg-[#EEE9DE] text-[#4B4A46] hover:bg-[#D8D0C2] hover:text-[#171717]'
+                  : 'bg-[#EEE9DE] text-[#3A3935] hover:bg-[#D8D0C2] hover:text-[#171717]'
               }`}
             >
               {rm.title}
@@ -53,17 +53,17 @@ export const RoadmapsPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D8D0C2]">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2.5 py-0.5 text-[11px] font-mono font-bold uppercase rounded bg-[#EEF3FB] text-[#2856B6]">
+              <span className="px-2.5 py-0.5 text-[0.75rem] font-mono font-bold uppercase rounded bg-[#EEF3FB] text-[#2856B6]">
                 {currentRoadmap.targetRole}
               </span>
-              <span className="inline-flex items-center gap-1 text-xs font-mono text-[#625E56]">
+              <span className="inline-flex items-center gap-1 text-xs font-mono text-[#55514A]">
                 <Clock className="w-3.5 h-3.5" /> {currentRoadmap.duration}
               </span>
             </div>
             <h2 className="font-display font-bold text-2xl text-[#171717]">
               {currentRoadmap.title}
             </h2>
-            <p className="text-base text-[#4B4A46] mt-2 leading-relaxed max-w-2xl">
+            <p className="text-base text-[#3A3935] mt-2 leading-relaxed max-w-2xl">
               {currentRoadmap.description}
             </p>
           </div>
@@ -79,7 +79,7 @@ export const RoadmapsPage: React.FC = () => {
         {/* Visual Sequential Workflow Bar (Desktop & Mobile) */}
         <div className="bg-[#EEE9DE] border border-[#D8D0C2] rounded-xl p-4 space-y-2">
           <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#171717] uppercase">
-            <Workflow className="w-4 h-4 text-[#D9206E]" /> Workflow Progression Path:
+            <Workflow className="w-4 h-4 text-[#BE1A5F]" /> Workflow Progression Path:
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
@@ -89,7 +89,7 @@ export const RoadmapsPage: React.FC = () => {
                   Phase {phase.phase}: {phase.name}
                 </div>
                 {idx < currentRoadmap.phases.length - 1 && (
-                  <span className="text-[#D9206E] font-bold text-sm" aria-hidden="true">→</span>
+                  <span className="text-[#BE1A5F] font-bold text-sm" aria-hidden="true">→</span>
                 )}
               </React.Fragment>
             ))}
@@ -109,19 +109,19 @@ export const RoadmapsPage: React.FC = () => {
                     {phase.name}
                   </h3>
                   {phase.timeline && (
-                    <span className="ml-auto inline-flex items-center gap-1 text-xs font-mono text-[#625E56] bg-[#EEE9DE] border border-[#D8D0C2] rounded px-2 py-0.5">
+                    <span className="ml-auto inline-flex items-center gap-1 text-xs font-mono text-[#55514A] bg-[#EEE9DE] border border-[#D8D0C2] rounded px-2 py-0.5">
                       <Clock className="w-3 h-3" /> {phase.timeline}
                     </span>
                   )}
                 </div>
 
-                <p className="text-base text-[#4B4A46] leading-relaxed mb-4 reading">
+                <p className="text-base text-[#3A3935] leading-relaxed mb-4 reading">
                   {phase.summary}
                 </p>
 
                 {/* Topics Pills */}
                 <div className="mb-4">
-                  <span className="font-mono text-[11px] uppercase font-bold text-[#625E56] block mb-1.5">
+                  <span className="font-mono text-[0.75rem] uppercase font-bold text-[#55514A] block mb-1.5">
                     Step Topics:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -135,16 +135,16 @@ export const RoadmapsPage: React.FC = () => {
 
                 {/* Milestone & Pitfalls */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-[#D8D0C2] text-sm">
-                  <div className="bg-[#E8F5F4] border border-[#BCE5E1] p-3.5 rounded-lg text-[#087F73]">
-                    <span className="font-mono font-bold uppercase text-[11px] flex items-center gap-1 mb-0.5">
-                      <Target className="w-3.5 h-3.5 text-[#087F73]" /> Key Milestone Project
+                  <div className="bg-[#E8F5F4] border border-[#BCE5E1] p-3.5 rounded-lg text-[#066B60]">
+                    <span className="font-mono font-bold uppercase text-[0.75rem] flex items-center gap-1 mb-0.5">
+                      <Target className="w-3.5 h-3.5 text-[#066B60]" /> Key Milestone Project
                     </span>
                     <p className="text-[#171717] font-medium">{phase.milestoneProject}</p>
                   </div>
 
                   <div className="bg-[#FDF0F5] border border-[#FCD4E2] p-3.5 rounded-lg text-[#9F1239]">
-                    <span className="font-mono font-bold uppercase text-[11px] flex items-center gap-1 mb-0.5">
-                      <AlertTriangle className="w-3.5 h-3.5 text-[#D9206E]" /> Pitfalls to Avoid
+                    <span className="font-mono font-bold uppercase text-[0.75rem] flex items-center gap-1 mb-0.5">
+                      <AlertTriangle className="w-3.5 h-3.5 text-[#BE1A5F]" /> Pitfalls to Avoid
                     </span>
                     <ul className="text-[#881337] list-disc pl-4 space-y-0.5">{phase.pitfallsToAvoid.map((p) => <li key={p}>{p}</li>)}</ul>
                   </div>

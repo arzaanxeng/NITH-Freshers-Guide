@@ -24,23 +24,23 @@ const stageNo = (n: number) => String(n).padStart(2, '0')
 const getStageIcon = (iconName: string) => {
   switch (iconName) {
     case 'Wrench':
-      return <Wrench className="w-4 h-4 text-[#D9206E]" />
+      return <Wrench className="w-4 h-4 text-[#BE1A5F]" />
     case 'Code':
       return <Code className="w-4 h-4 text-[#2856B6]" />
     case 'Target':
-      return <Target className="w-4 h-4 text-[#087F73]" />
+      return <Target className="w-4 h-4 text-[#066B60]" />
     case 'FolderPlus':
       return <FolderPlus className="w-4 h-4 text-[#B45309]" />
     case 'Users':
-      return <Users className="w-4 h-4 text-[#D9206E]" />
+      return <Users className="w-4 h-4 text-[#BE1A5F]" />
     case 'Sparkles':
       return <Sparkles className="w-4 h-4 text-[#2856B6]" />
     case 'Briefcase':
-      return <Briefcase className="w-4 h-4 text-[#087F73]" />
+      return <Briefcase className="w-4 h-4 text-[#066B60]" />
     case 'Shield':
       return <Shield className="w-4 h-4 text-[#B45309]" />
     default:
-      return <Workflow className="w-4 h-4 text-[#D9206E]" />
+      return <Workflow className="w-4 h-4 text-[#BE1A5F]" />
   }
 }
 
@@ -88,10 +88,10 @@ export const ChecklistsPage: React.FC = () => {
               {getStageIcon(stage.iconName)}
               <span className="font-display font-bold text-base text-[#171717]">{stage.title}</span>
             </span>
-            <span className="block text-sm text-[#4B4A46] mt-0.5">{stage.subtitle}</span>
+            <span className="block text-[0.9375rem] text-[#3A3935] mt-0.5">{stage.subtitle}</span>
           </span>
         </span>
-        {isSelected ? <ChevronUp className="w-5 h-5 text-[#D9206E] flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-[#625E56] flex-shrink-0" />}
+        {isSelected ? <ChevronUp className="w-5 h-5 text-[#BE1A5F] flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-[#55514A] flex-shrink-0" />}
       </button>
     ) : (
       <button
@@ -109,11 +109,11 @@ export const ChecklistsPage: React.FC = () => {
             {getStageIcon(stage.iconName)}
           </span>
           <span className="block font-display font-bold text-base text-[#171717] leading-snug group-hover:text-[#D9206E] transition-colors">{stage.title}</span>
-          <span className="block text-sm text-[#4B4A46] mt-1 line-clamp-3 leading-snug">{stage.subtitle}</span>
+          <span className="block text-[0.9375rem] text-[#3A3935] mt-1 line-clamp-3 leading-snug">{stage.subtitle}</span>
         </span>
-        <span className="mt-3 pt-2 border-t border-[#D8D0C2] flex items-center justify-between text-xs font-mono text-[#625E56]">
+        <span className="mt-3 pt-2 border-t border-[#D8D0C2] flex items-center justify-between text-xs font-mono text-[#55514A]">
           <span>Stage {stageNo(stage.stepNumber)}</span>
-          {isSelected ? <ChevronUp className="w-4 h-4 text-[#D9206E]" /> : <ChevronDown className="w-4 h-4 text-[#625E56]" />}
+          {isSelected ? <ChevronUp className="w-4 h-4 text-[#BE1A5F]" /> : <ChevronDown className="w-4 h-4 text-[#55514A]" />}
         </span>
       </button>
     )
@@ -129,7 +129,7 @@ export const ChecklistsPage: React.FC = () => {
           <span className="font-mono text-sm font-bold uppercase text-[#C21A62]">Stage {stageNo(stage.stepNumber)} of {stageNo(stages.length)}</span>
         </div>
         <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#171717]">{stage.title}</h2>
-        <p className="text-base text-[#4B4A46] leading-relaxed reading">{stage.subtitle}</p>
+        <p className="text-base text-[#3A3935] leading-relaxed reading">{stage.subtitle}</p>
       </div>
 
       <div className="space-y-3">
@@ -139,16 +139,16 @@ export const ChecklistsPage: React.FC = () => {
             <div key={item.id} className="bg-[#FFFDF8] border border-[#D8D0C2] rounded-xl p-4 space-y-1.5">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-start gap-2 font-semibold text-base text-[#171717]">
-                  <CheckCircle className="w-4 h-4 text-[#087F73] flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-4 h-4 text-[#066B60] flex-shrink-0 mt-1" />
                   <span>{item.label}</span>
                 </div>
                 {item.categoryTag && (
-                  <span className="px-2 py-0.5 text-xs font-mono font-bold uppercase rounded bg-[#EEE9DE] border border-[#D8D0C2] text-[#625E56] flex-shrink-0">
+                  <span className="px-2 py-0.5 text-xs font-mono font-bold uppercase rounded bg-[#EEE9DE] border border-[#D8D0C2] text-[#55514A] flex-shrink-0">
                     {item.categoryTag}
                   </span>
                 )}
               </div>
-              {item.detail && <p className="text-sm text-[#4B4A46] pl-6 leading-relaxed">{item.detail}</p>}
+              {item.detail && <p className="text-[0.9375rem] text-[#3A3935] pl-6 leading-relaxed">{item.detail}</p>}
             </div>
           ))}
         </div>
@@ -185,7 +185,7 @@ export const ChecklistsPage: React.FC = () => {
       <div>
         <span className="font-mono text-xs text-[#C21A62] font-bold uppercase tracking-wider block">Sequential First-Year Field Guide</span>
         <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#171717] mt-1">First Year Guidance Flowchart</h1>
-        <p className="text-base text-[#4B4A46] mt-2 max-w-2xl leading-relaxed">
+        <p className="text-base text-[#3A3935] mt-2 max-w-2xl leading-relaxed">
           A step-by-step flow of the essential things every NITH fresher should focus on during their first year.
         </p>
       </div>
@@ -193,7 +193,7 @@ export const ChecklistsPage: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between border-b border-[#D8D0C2] pb-2">
           <span className="font-mono text-sm font-bold uppercase tracking-wider text-[#171717]">Recommended first-year sequence</span>
-          <span className="font-mono text-xs text-[#625E56] hidden sm:inline">Select a stage for detailed guidance</span>
+          <span className="font-mono text-xs text-[#55514A] hidden sm:inline">Select a stage for detailed guidance</span>
         </div>
 
         {/* DESKTOP ZIG-ZAG (lg and above) */}

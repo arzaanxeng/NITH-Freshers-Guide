@@ -3,7 +3,7 @@ import { SITE_CONFIG } from '../../data/config'
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#FFFDF8] border-t border-[#D8D0C2] py-10 mt-16 text-[#4B4A46]">
+    <footer className="bg-[#FFFDF8] border-t border-[#D8D0C2] py-10 mt-16 text-[#3A3935]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-2">
@@ -15,17 +15,17 @@ export const Footer: React.FC = () => {
                 {SITE_CONFIG.title}
               </span>
             </div>
-            <p className="text-sm text-[#625E56] leading-relaxed max-w-md">
+            <p className="text-sm text-[#55514A] leading-relaxed max-w-md">
               {SITE_CONFIG.subtitle} — A practical, honest, student-first technical map for National Institute of Technology Hamirpur students.
             </p>
             {/* Author Credit */}
             <p className="font-mono text-xs text-[#171717] font-semibold mt-3">
-              Created by <span className="text-[#D9206E]">{SITE_CONFIG.authorName}</span>
+              Created by <span className="text-[#BE1A5F]">{SITE_CONFIG.authorName}</span>
             </p>
           </div>
 
           <div>
-            <h4 className="font-mono text-[11px] uppercase tracking-wider font-bold text-[#171717] mb-3">
+            <h4 className="font-mono text-[0.75rem] uppercase tracking-wider font-bold text-[#171717] mb-3">
               Quick Entry
             </h4>
             <ul className="space-y-2 text-sm">
@@ -53,7 +53,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="font-mono text-[11px] uppercase tracking-wider font-bold text-[#171717] mb-3">
+            <h4 className="font-mono text-[0.75rem] uppercase tracking-wider font-bold text-[#171717] mb-3">
               NITH & Reality
             </h4>
             <ul className="space-y-2 text-sm">
@@ -81,11 +81,11 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="pt-6 border-t border-[#D8D0C2] flex flex-col sm:flex-row items-center justify-between text-sm text-[#625E56] gap-4">
+        <div className="pt-6 border-t border-[#D8D0C2] flex flex-col sm:flex-row items-center justify-between text-sm text-[#55514A] gap-4">
           <p>
             © {new Date().getFullYear()} {SITE_CONFIG.title} • {SITE_CONFIG.subtitle}
           </p>
-          <p className="font-mono text-[11px]">
+          <p className="font-mono text-[0.75rem]">
             Created by {SITE_CONFIG.authorName} • {SITE_CONFIG.edition}
           </p>
         </div>

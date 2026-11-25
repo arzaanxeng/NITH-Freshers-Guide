@@ -7,13 +7,13 @@ export const RealityCheckPage: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
       <div>
-        <span className="font-mono text-xs text-[#D9206E] font-bold uppercase tracking-wider block">
+        <span className="font-mono text-xs text-[#BE1A5F] font-bold uppercase tracking-wider block">
           Senior Reality Check
         </span>
         <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#171717] mt-1">
           Unvarnished Truths & Common Fresher Traps
         </h1>
-        <p className="text-base text-[#4B4A46] mt-2 max-w-2xl leading-relaxed">
+        <p className="text-base text-[#3A3935] mt-2 max-w-2xl leading-relaxed">
           Direct, honest advice from senior students. Avoid tutorial hell, certificate traps, trending tech hype, and false LinkedIn metrics.
         </p>
       </div>

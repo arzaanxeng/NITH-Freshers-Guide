@@ -49,17 +49,17 @@ export const ResourcesPage: React.FC = () => {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs text-[#087F73] font-bold uppercase tracking-wider block">
+          <span className="font-mono text-xs text-[#066B60] font-bold uppercase tracking-wider block">
             Centralized Resource Directory
           </span>
-          <span className="px-2 py-0.5 text-[11px] font-mono font-bold uppercase bg-[#E8F5F4] text-[#087F73] border border-[#BCE5E1] rounded inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 text-[0.75rem] font-mono font-bold uppercase bg-[#E8F5F4] text-[#066B60] border border-[#BCE5E1] rounded inline-flex items-center gap-1">
             <ShieldCheck className="w-3 h-3" /> Resources Verified Aug 2026
           </span>
         </div>
         <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#171717] mt-1">
           Curated Technical Resources
         </h1>
-        <p className="text-base text-[#4B4A46] mt-2 max-w-2xl leading-relaxed">
+        <p className="text-base text-[#3A3935] mt-2 max-w-2xl leading-relaxed">
           Quality over quantity. Every resource in this directory has been audited and verified with live links to top educators, official documentation, and practice platforms.
         </p>
       </div>
@@ -68,7 +68,7 @@ export const ResourcesPage: React.FC = () => {
       <div className="card-level-2 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-[#625E56] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#55514A] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
@@ -81,7 +81,7 @@ export const ResourcesPage: React.FC = () => {
 
         {/* Dropdown Filters */}
         <div className="flex items-center gap-2 flex-wrap text-xs">
-          <div className="flex items-center gap-1 text-[#625E56] font-mono mr-1">
+          <div className="flex items-center gap-1 text-[#55514A] font-mono mr-1">
             <Filter className="w-3.5 h-3.5" /> Filters:
           </div>
 
@@ -131,12 +131,12 @@ export const ResourcesPage: React.FC = () => {
       </div>
 
       {/* Results Count Bar */}
-      <div className="flex items-center justify-between text-sm font-mono text-[#625E56]">
+      <div className="flex items-center justify-between text-sm font-mono text-[#55514A]">
         <span aria-live="polite">Showing {filteredResources.length} of {allResources.length} curated resources</span>
         {(selectedDomain !== 'all' || selectedType !== 'all' || selectedLevel !== 'all' || searchQuery !== '') && (
           <button
             onClick={resetFilters}
-            className="text-[#D9206E] hover:underline"
+            className="text-[#BE1A5F] hover:underline"
           >
             Reset All Filters
           </button>
@@ -145,8 +145,8 @@ export const ResourcesPage: React.FC = () => {
 
       {/* Resources Grid */}
       {filteredResources.length === 0 ? (
-        <div className="card-level-2 rounded-xl p-12 text-center text-[#625E56]">
-          <BookOpen className="w-8 h-8 text-[#625E56] mx-auto mb-2" />
+        <div className="card-level-2 rounded-xl p-12 text-center text-[#55514A]">
+          <BookOpen className="w-8 h-8 text-[#55514A] mx-auto mb-2" />
           <p className="font-medium text-sm">No resources match your search criteria.</p>
         </div>
       ) : (
